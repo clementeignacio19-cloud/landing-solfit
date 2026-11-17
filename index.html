@@ -93,11 +93,11 @@
 
   /* marquee */
   .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--sun);color:var(--sun-ink);overflow:hidden;white-space:nowrap;padding:11px 0;}
-  .marquee .track{display:inline-flex;animation:slide 30s linear infinite;}
+  .marquee .track{display:inline-flex;animation:slide 20s linear infinite;will-change:transform;}
+  .marquee:hover .track{animation-play-state:paused;}
   .marquee span{font-family:var(--ff-display);font-weight:600;font-size:23px;text-transform:uppercase;letter-spacing:.04em;padding:0 22px;display:inline-flex;align-items:center;gap:22px;}
   .marquee span::after{content:"";width:7px;height:7px;background:var(--sun-ink);border-radius:50%;opacity:.7;}
   @keyframes slide{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-  @media (prefers-reduced-motion:reduce){ .marquee .track{animation:none;} }
 
   section{padding:90px 0;}
   @media (max-width:640px){ section{padding:56px 0;} }

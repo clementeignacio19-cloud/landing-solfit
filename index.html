@@ -222,6 +222,19 @@
   .pase:hover{border-color:var(--sun);}
   .where{margin-top:22px;border:1px solid var(--line);background:var(--forest-2);padding:20px 22px;display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center;font-size:14px;color:var(--bone-soft);}
   .where b{color:var(--bone);font-weight:600;}
+  .place{max-width:760px;margin:38px auto 0;border:1px solid var(--line-strong);background:var(--forest-1);overflow:hidden;border-radius:5px;}
+  .place-map{display:block;position:relative;aspect-ratio:2.1/1;overflow:hidden;}
+  .place-map img{width:100%;height:100%;object-fit:cover;}
+  .place-map::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(12,21,16,.5),transparent 55%);pointer-events:none;}
+  .place-see{position:absolute;right:12px;bottom:12px;z-index:2;font-size:12px;font-weight:700;background:rgba(12,21,16,.82);border:1px solid var(--line-strong);color:var(--bone);padding:7px 11px;border-radius:6px;}
+  .place-map:hover .place-see{color:var(--sun);border-color:var(--sun);}
+  .place-info{padding:24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;}
+  .place-info h3{font-family:var(--ff-display);font-size:30px;font-weight:600;text-transform:uppercase;margin:0;}
+  .place-addr{margin:0;font-size:15px;color:var(--bone-soft);}
+  .place-hours{display:inline-flex;align-items:center;gap:12px;margin:12px 0 6px;border:1px solid var(--line);background:var(--forest-2);padding:11px 18px;border-radius:99px;}
+  .place-hours svg{color:var(--sun);flex:0 0 auto;}
+  .place-k{display:block;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ash);font-weight:700;}
+  .place-hours b{font-family:var(--ff-num);font-size:18px;font-weight:800;color:var(--bone);font-variant-numeric:tabular-nums;}
 
   /* online */
   .online-card{border:1px solid var(--line-strong);background:linear-gradient(150deg,#16281D,#101E18);padding:34px 32px;display:grid;grid-template-columns:1.3fr .7fr;gap:30px;align-items:center;}
@@ -765,7 +778,7 @@
 <section id="presencial">
   <div class="wrap">
     <div class="section-head">
-      <div><span class="eyebrow">Presencial · Las Trancas</span><h2>Planes mensuales y pases.</h2></div>
+      <div><span class="eyebrow">Solfit Gym · Las Trancas</span><h2>Planes mensuales y pases.</h2></div>
       <p>Elige un plan mensual para entrenar seguido, o un pase si vienes por temporada. Todos incluyen tu cuenta en la app Solfit.</p>
     </div>
     <div class="plans">
@@ -782,10 +795,20 @@
       <div class="pase"><button onclick="openCheckout('Pase semanal','$20.000','Pase de 1 semana')"><span class="pl">Semanal<small>7 días seguidos</small></span><span class="pr num">$20.000</span></button></div>
       <div class="pase"><button onclick="openCheckout('Pase 2 semanas','$30.000','Pase de 2 semanas')"><span class="pl">2 semanas<small>14 días seguidos</small></span><span class="pr num">$30.000</span></button></div>
     </div>
-    <div class="where">
-      <span>📍 <b>Dirección:</b> Las Trancas, Pinto, Ñuble (gimnasio físico)</span>
-      <span>🕑 <b>Horario:</b> 8:30 a 21:00 hrs</span>
-      <span>⚖️ <b>Evaluación:</b> balanza Omron</span>
+    <div class="place">
+      <a class="place-map" href="https://www.google.com/maps/search/?api=1&query=Valle+Las+Trancas,+Pinto,+Chile" target="_blank" rel="noopener" aria-label="Ver Solfit Gym en Google Maps">
+        <img src="mapa.jpg" alt="Mapa de Las Trancas, Pinto, Ñuble" loading="lazy">
+        <span class="place-see">Ver en Google Maps</span>
+      </a>
+      <div class="place-info">
+        <h3>Solfit Gym</h3>
+        <p class="place-addr">Las Trancas, Pinto, Ñuble · Gimnasio físico</p>
+        <div class="place-hours">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <div style="text-align:left;"><span class="place-k">Horario de atención</span><b>8:30 a 21:00 hrs</b></div>
+        </div>
+        <a class="btn btn-sun btn-sm" href="https://www.google.com/maps/search/?api=1&query=Valle+Las+Trancas,+Pinto,+Chile" target="_blank" rel="noopener">Cómo llegar</a>
+      </div>
     </div>
   </div>
 </section>

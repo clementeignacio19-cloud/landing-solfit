@@ -111,10 +111,9 @@
   section{padding:90px 0;}
   @media (max-width:640px){ section{padding:56px 0;} }
   section.alt{background:var(--forest-1);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-  .section-head{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:end;margin-bottom:44px;}
-  @media (max-width:800px){ .section-head{grid-template-columns:1fr;gap:16px;} }
-  .section-head h2{font-size:clamp(38px,5.4vw,70px);text-transform:uppercase;margin-top:14px;}
-  .section-head p{margin:0;font-size:16px;color:var(--bone-soft);max-width:48ch;line-height:1.6;}
+  .section-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;margin-bottom:42px;}
+  .section-head h2{font-size:clamp(38px,5.4vw,70px);text-transform:uppercase;margin-top:10px;max-width:20ch;}
+  .section-head p{display:none;}
   .cta-row{margin-top:34px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
 
   /* prueba social */
@@ -138,13 +137,12 @@
   .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
   @media (max-width:900px){ .pillars{grid-template-columns:1fr 1fr;} }
   @media (max-width:520px){ .pillars{grid-template-columns:1fr;} }
-  .pillar{background:var(--forest-0);padding:28px 24px 30px;position:relative;overflow:hidden;min-height:248px;display:flex;flex-direction:column;justify-content:flex-end;}
-  .pillar::before{content:"";position:absolute;inset:0;background:radial-gradient(300px 200px at 20% 0%,var(--sage-soft),transparent 70%);opacity:0;transition:opacity .3s;}
+  .pillar{background:var(--forest-0);padding:34px 22px;position:relative;overflow:hidden;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;}
+  .pillar::before{content:"";position:absolute;inset:0;background:radial-gradient(300px 220px at 50% 0%,var(--sage-soft),transparent 70%);opacity:0;transition:opacity .3s;}
   .pillar:hover::before{opacity:1;}
-  .pillar .ic{width:38px;height:38px;color:var(--sun);margin-bottom:auto;}
-  .pillar h3{font-size:30px;text-transform:uppercase;margin:18px 0 8px;}
-  .pillar p{margin:0;font-size:13.5px;color:var(--bone-soft);line-height:1.55;}
-  .pillar .tag{position:absolute;top:18px;right:18px;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ash);font-weight:700;}
+  .pillar .ic{width:42px;height:42px;color:var(--sun);position:relative;}
+  .pillar h3{font-size:29px;text-transform:uppercase;margin:0;}
+  .pillar p{margin:0;font-size:13.5px;color:var(--bone-soft);line-height:1.5;max-width:26ch;}
 
   /* galería */
   .gallery{display:grid;grid-template-columns:1.15fr .85fr .85fr;grid-template-rows:300px 300px;gap:14px;}
@@ -585,9 +583,9 @@
       <p>Esto es lo que logran quienes entrenan con sistema en vez de improvisar. Los números y testimonios los completa Sol con datos reales.</p>
     </div>
     <div class="proof-strip">
-      <div class="cell"><div class="big"><span class="todo">[SOL: nº]</span></div><div class="lbl">Años entrenando personas</div></div>
-      <div class="cell"><div class="big"><span class="todo">[SOL: nº]</span></div><div class="lbl">Evaluaciones corporales hechas</div></div>
-      <div class="cell"><div class="big"><span class="todo">[SOL: nº]</span></div><div class="lbl">Alumnos activos hoy</div></div>
+      <div class="cell"><div class="big" data-count="15">15</div><div class="lbl">Años entrenando personas</div></div>
+      <div class="cell"><div class="big" data-count="1000" data-prefix="+">+1.000</div><div class="lbl">Evaluaciones corporales hechas</div></div>
+      <div class="cell"><div class="big" data-count="30">30</div><div class="lbl">Alumnos activos</div></div>
     </div>
     <div class="tcards">
       <article class="tcard"><div class="stars">★★★★★</div><blockquote>"Llevaba años entrenando sola y sin avanzar. Con el plan de Sol por fin vi cambios reales en la balanza y en la fuerza."</blockquote><div class="who"><span class="av">MP</span><div><div class="nm"><span class="todo">[SOL: nombre]</span></div><div class="res"><span class="todo">[SOL: resultado]</span></div></div></div></article>
@@ -607,10 +605,10 @@
       <p>Una rutina sola no cambia nada si el resto del día la deshace. Cada curso trabaja los cuatro pilares a la vez, y la app te acompaña en los cuatro.</p>
     </div>
     <div class="pillars">
-      <div class="pillar"><span class="tag">Pilar</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 10v4M6 8v8M9 10v4M15 10v4M18 8v8M21 10v4M9 12h6"/></svg><h3>Entrenamiento</h3><p>Progresión planificada, no al azar. Rutinas que se ajustan a tu avance, con video de técnica en cada ejercicio.</p></div>
-      <div class="pillar"><span class="tag">Pilar</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3c-4 4-7 7-7 11a7 7 0 0 0 14 0c0-4-3-7-7-11z"/><path d="M12 21v-8"/></svg><h3>Nutrición</h3><p>Hábitos de alimentación simples y sostenibles, pensados para acompañar tu entrenamiento sin dietas imposibles.</p></div>
-      <div class="pillar"><span class="tag">Pilar</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><h3>Descanso</h3><p>Dormir y recuperar también es parte del plan. Sin recuperación no hay progreso, y aquí se cuida de verdad.</p></div>
-      <div class="pillar"><span class="tag">Pilar</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg><h3>Mentalidad</h3><p>Constancia y bienestar para sostener el cambio, para que el hábito no dependa de la motivación del día.</p></div>
+      <div class="pillar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/></svg><h3>Entrenamiento</h3><p>Progresión planificada, con video de técnica en cada ejercicio.</p></div>
+      <div class="pillar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20C4 10 12 4 20 4c0 10-8 16-16 16z"/><path d="M4 20C8 16 12 12 17 9"/></svg><h3>Nutrición</h3><p>Hábitos simples que acompañan tu entrenamiento, sin dietas imposibles.</p></div>
+      <div class="pillar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/><path d="M16.8 4.3l.5 1.4 1.4.5-1.4.5-.5 1.4-.5-1.4-1.4-.5 1.4-.5z"/></svg><h3>Descanso</h3><p>Dormir y recuperar también es parte del plan. Sin descanso no hay progreso.</p></div>
+      <div class="pillar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-4 10.5c.6.5 1 1.3 1 2.1V16h6v-.4c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg><h3>Mentalidad</h3><p>Constancia y bienestar para que el hábito no dependa de la motivación.</p></div>
     </div>
   </div>
 </section>
@@ -895,8 +893,10 @@
 <!-- GARANTÍA + FAQ -->
 <section id="faq">
   <div class="wrap">
-    <span class="eyebrow">Sin letra chica</span>
-    <h2 style="font-size:clamp(38px,5.4vw,66px);text-transform:uppercase;margin:14px 0 30px;">Quitemos el miedo a empezar.</h2>
+    <div style="text-align:center;margin-bottom:30px;">
+      <span class="eyebrow">Sin letra chica</span>
+      <h2 style="font-size:clamp(38px,5.4vw,66px);text-transform:uppercase;margin:10px 0 0;">Quitemos el miedo a empezar.</h2>
+    </div>
     <div class="guarantee">
       <svg class="medal" viewBox="0 0 48 48" fill="none">
         <circle cx="24" cy="19" r="13" fill="none" stroke="var(--sun)" stroke-width="2.4"/>
@@ -1013,8 +1013,9 @@
   }
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeCheckout(); });
   (function(){
-    function run(el){ var target=parseFloat(el.getAttribute('data-count'))||0, suf=el.getAttribute('data-suffix')||'', dur=1100, start=null;
-      function step(ts){ if(!start)start=ts; var p=Math.min((ts-start)/dur,1); el.textContent=Math.round(target*p)+suf; if(p<1)requestAnimationFrame(step); }
+    function run(el){ var target=parseFloat(el.getAttribute('data-count'))||0, suf=el.getAttribute('data-suffix')||'', pre=el.getAttribute('data-prefix')||'', dur=1200, start=null;
+      function fmt(n){ return pre + Math.round(n).toLocaleString('es-CL') + suf; }
+      function step(ts){ if(!start)start=ts; var p=Math.min((ts-start)/dur,1); el.textContent=fmt(target*p); if(p<1)requestAnimationFrame(step); }
       requestAnimationFrame(step); }
     var nums=document.querySelectorAll('[data-count]');
     if(!('IntersectionObserver' in window)||!nums.length) return;

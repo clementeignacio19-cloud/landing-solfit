@@ -376,6 +376,12 @@
   .pay-note{margin-top:22px;border:1px solid var(--success);background:var(--success-soft);padding:18px 22px;font-size:14px;color:var(--bone-soft);display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;}
   .pay-note b{color:var(--bone);font-weight:600;}
   .pay-badge{font-family:var(--ff-display);font-weight:600;font-size:18px;letter-spacing:.04em;text-transform:uppercase;color:var(--sun);border:1px solid var(--line-strong);padding:5px 10px;}
+  .pay-marquee{overflow:hidden;white-space:nowrap;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);background:var(--forest-2);padding:15px 0;margin-top:26px;}
+  .pay-marquee .ptrack{display:inline-flex;animation:slide 24s linear infinite;will-change:transform;}
+  .pay-marquee span{font-family:var(--ff-display);font-weight:600;font-size:21px;text-transform:uppercase;letter-spacing:.03em;padding:0 20px;display:inline-flex;align-items:center;gap:20px;color:var(--bone-soft);}
+  .pay-marquee span.hl{color:var(--sun);}
+  .pay-marquee span::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--sun);opacity:.55;flex:0 0 auto;}
+  .pay-fine{margin-top:16px;font-size:14px;color:var(--bone-soft);text-align:center;}
 
   /* ---------- movimiento ---------- */
   @keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
@@ -741,15 +747,19 @@
     </div>
     <div class="steps">
       <div class="step"><div class="n num">1</div><h3>Eliges tu curso o plan</h3><p>Toca "Comprar" y revisa el resumen con el total antes de pagar.</p></div>
-      <div class="step"><div class="n num">2</div><h3>Pagas con Mercado Pago</h3><p>Tarjeta de crédito, débito o saldo. Pago seguro; no guardamos los datos de tu tarjeta.</p><div class="pay-logos"><span>Crédito</span><span>Débito</span><span>Saldo</span></div></div>
+      <div class="step"><div class="n num">2</div><h3>Pagas con Mercado Pago</h3><p>Pago seguro con tarjeta o transferencia, en pocos pasos.</p></div>
       <div class="step"><div class="n num">3</div><h3>Creas tu cuenta</h3><p>Usa el mismo correo del pago para que tu compra se reconozca sola.</p></div>
       <div class="step"><div class="n num">4</div><h3>Entras y entrenas</h3><p>Abres app.solfitonline.com y tu curso o plan ya está activo.</p></div>
     </div>
-    <div class="pay-note">
-      <span class="pay-badge">Mercado Pago</span>
-      <span><b>Pago seguro.</b> No guardamos los datos de tu tarjeta.</span>
-      <span>¿Pagaste con otro correo? Te lo vinculamos por WhatsApp.</span>
+    <div class="pay-marquee" aria-hidden="true">
+      <div class="ptrack">
+        <span class="hl">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
+        <span class="hl">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
+        <span class="hl">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
+        <span class="hl">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
+      </div>
     </div>
+    <p class="pay-fine">No guardamos los datos de tu tarjeta. ¿Pagaste con otro correo? Te lo vinculamos por WhatsApp.</p>
   </div>
 </section>
 

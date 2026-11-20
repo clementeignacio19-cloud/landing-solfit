@@ -1,1062 +1,767 @@
-<title>Solfit · Las Trancas</title>
+<title>Solfit Gym · Las Trancas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
 <style>
   :root{
-    /* DESIGN SYSTEM SOLFIT
-       Fondo       -> forest-0 (base), forest-1 (superficie), forest-2 (elevada)
-       Texto       -> bone (principal), bone-soft (secundario), ash (tenue)
-       Acciones    -> sun (primaria), brand (secundaria), sage (acento)
-       Estados     -> success (confirmación), warning (aviso), danger (error)
-       Tipografías -> display (títulos), body (texto), num (números/precios) */
-    --forest-0:#0C1510; --forest-1:#101E18; --forest-2:#16271E;
-    --brand:#1B503C; --brand-2:#226849;
-    --sage:#7DA57A; --sage-soft:rgba(125,165,122,.14);
-    --sun:#F7941D; --sun-2:#FFB04A; --sun-deep:#C06A09; --sun-ink:#20140A;
-    --bone:#F2EEE3; --bone-soft:#B6BDAC; --ash:#7E887A;
-    --line:rgba(242,238,227,.10); --line-strong:rgba(242,238,227,.21);
-    --glow:rgba(247,148,29,.26); --radius:7px;
-    --success:#57C98A; --success-soft:rgba(87,201,138,.14);
-    --warning:#E8A43A; --danger:#E5533D;
-    --ff-display:"Oswald",Impact,"Arial Narrow",sans-serif;
-    --ff-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
-    --ff-num:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
-    color-scheme:dark;
+    /* Color: sistema Solfit 60/30/10 */
+    --c-bg:#1B503C; --c-bg-deep:#10301F;
+    --c-secondary:#759B72;
+    --c-accent:#F9930B; --c-accent-2:#FFB24A; --c-on-accent:#10301F;
+    --c-cream:#FAF6EE; --c-text:#F3EFE6;
+    --c-muted:color-mix(in srgb,var(--c-text) 72%,transparent);
+    --c-surface:color-mix(in srgb,var(--c-secondary) 14%,var(--c-bg-deep));
+    --c-surface-2:color-mix(in srgb,var(--c-secondary) 20%,var(--c-bg-deep));
+    --c-border:color-mix(in srgb,var(--c-secondary) 35%,transparent);
+    --c-success:#6BD39A; --c-danger:#E5533D;
+    /* Tipografía */
+    --f-display:"Barlow Condensed",Impact,system-ui,sans-serif;
+    --f-body:"Inter",system-ui,-apple-system,sans-serif;
+    --fs-display:clamp(3rem,11vw + .5rem,7.5rem);
+    --fs-h2:clamp(2.25rem,7vw + .5rem,4.5rem);
+    --fs-h3:clamp(1.4rem,2vw + 1rem,2rem);
+    --fs-body:clamp(1.0625rem,.3vw + 1rem,1.1875rem);
+    --fs-label:.8125rem;
+    /* Espacio */
+    --s-1:.5rem; --s-2:.75rem; --s-3:1rem; --s-4:1.5rem; --s-5:2rem; --s-6:3rem; --s-7:4rem; --s-8:6rem;
+    --section-y:clamp(4.5rem,12vw,9rem);
+    --gutter:clamp(1.25rem,5vw,4rem);
+    --container:1240px;
+    /* Forma y movimiento */
+    --r-md:16px; --r-lg:28px; --r-full:999px;
+    --ease:cubic-bezier(.22,1,.36,1); --t-fast:.2s; --t-base:.5s; --t-slow:.9s;
+    --z-header:50; --z-menu:80; --z-bar:60; --z-wa:65; --z-drawer:90; --z-toast:100;
   }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{margin:0;background:var(--forest-0);color:var(--bone);font-family:var(--ff-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
-  ::selection{background:var(--sun);color:var(--sun-ink);}
-  a{color:inherit;} img{max-width:100%;display:block;}
-  h1,h2,h3{font-family:var(--ff-display);font-weight:600;line-height:1.1;letter-spacing:.005em;margin:0;text-wrap:balance;}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
-  @media (max-width:640px){ .wrap{padding:0 18px;} }
-  .eyebrow{font-family:var(--ff-display);font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--sun);display:inline-block;}
-  .muted{color:var(--bone-soft);} .num{font-variant-numeric:tabular-nums;}
-  .todo{background:var(--sage-soft);color:var(--sage);border:1px dashed rgba(125,165,122,.55);padding:0 7px;border-radius:4px;font-size:.84em;font-weight:600;white-space:nowrap;font-family:var(--ff-body);}
-  .demo-tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ash);border:1px solid var(--line-strong);padding:3px 8px;border-radius:99px;}
+  *,*::before,*::after{box-sizing:border-box;margin:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:72px}
+  body{background:var(--c-bg);color:var(--c-text);font:400 var(--fs-body)/1.6 var(--f-body);overflow-x:clip;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  img,video{display:block;max-width:100%;height:auto}
+  a{color:inherit}
+  h1,h2,h3{font-family:var(--f-display);font-weight:800;line-height:.95;letter-spacing:-.01em;text-transform:uppercase;text-wrap:balance}
+  h1{font-size:var(--fs-display)} h2{font-size:var(--fs-h2)} h3{font-size:var(--fs-h3);line-height:1.05}
+  p{text-wrap:pretty;color:var(--c-muted)}
+  ::selection{background:var(--c-accent);color:var(--c-on-accent)}
+  .num{font-variant-numeric:tabular-nums}
+  .container{width:min(100% - 2*var(--gutter),var(--container));margin-inline:auto}
+  .section{padding-block:var(--section-y)}
+  .section--deep{background:var(--c-bg-deep)}
+  .section--light{background:var(--c-cream);color:var(--c-bg-deep)}
+  .section--light p{color:color-mix(in srgb,var(--c-bg-deep) 75%,transparent)}
+  .section--light .eyebrow{color:color-mix(in srgb,var(--c-bg,#1B503C) 80%,#000)}
+  .banner{background:var(--c-accent);color:var(--c-on-accent)}
+  .card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-lg)}
+  .eyebrow{font:600 var(--fs-label)/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--c-secondary);display:inline-block}
+  .lead{max-width:56ch}
+  .center{text-align:center;display:flex;flex-direction:column;align-items:center}
+  .head{margin-bottom:var(--s-6)}
+  .head h2{margin-top:var(--s-2)}
 
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:14px 24px;border-radius:var(--radius);font-family:var(--ff-body);font-weight:700;font-size:13.5px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border:1.5px solid transparent;cursor:pointer;line-height:1;transition:transform .15s,background .15s,border-color .15s,color .15s;}
-  .btn:focus-visible{outline:2px solid var(--sun);outline-offset:3px;}
-  .btn:active{transform:translateY(1px);}
-  .btn-sun{background:var(--sun);color:var(--sun-ink);}
-  .btn-sun:hover{background:var(--sun-2);}
-  .btn-ghost{background:transparent;color:var(--bone);border-color:var(--line-strong);}
-  .btn-ghost:hover{border-color:var(--sun);color:var(--sun);}
-  .btn-sage{background:var(--brand);color:var(--bone);}
-  .btn-sage:hover{background:var(--brand-2);}
-  .btn-sm{padding:11px 16px;font-size:12.5px;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:56px;padding:0 1.75rem;border-radius:var(--r-full);font:600 1.0625rem/1 var(--f-body);text-decoration:none;cursor:pointer;border:none;transition:transform var(--t-fast) var(--ease),background var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
+  .btn--primary{background:var(--c-accent);color:var(--c-on-accent)}
+  .btn--ghost{background:transparent;border:1.5px solid color-mix(in srgb,var(--c-text) 30%,transparent);color:var(--c-text)}
+  .section--light .btn--ghost{border-color:color-mix(in srgb,var(--c-bg-deep) 30%,transparent);color:var(--c-bg-deep)}
+  .btn--sage{background:var(--c-secondary);color:var(--c-bg-deep)}
+  .btn--sm{min-height:46px;padding:0 1.1rem;font-size:.95rem}
+  .btn:active{transform:scale(.97)}
+  @media (hover:hover){
+    .btn--primary:hover{transform:translateY(-2px);background:var(--c-accent-2);box-shadow:0 10px 30px color-mix(in srgb,var(--c-accent) 35%,transparent)}
+    .btn--ghost:hover{border-color:var(--c-accent);color:var(--c-accent)}
+  }
+  :focus-visible{outline:3px solid var(--c-accent);outline-offset:3px}
+  @media (max-width:599px){.btn{width:100%}}
 
-  nav.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 28px;background:rgba(12,21,16,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-  .brand{display:inline-flex;align-items:center;gap:11px;text-decoration:none;}
-  .emblem{height:38px;width:auto;display:block;flex:0 0 auto;}
-  .brand .word{font-family:var(--ff-display);font-weight:700;font-size:25px;letter-spacing:.02em;text-transform:uppercase;color:var(--bone);}
-  .nav-links{display:flex;gap:26px;font-size:14px;font-weight:700;letter-spacing:0;}
-  .nav-links a{color:var(--bone-soft);text-decoration:none;}
-  .nav-links a:hover{color:var(--sun);}
-  .nav-right{display:flex;align-items:center;gap:12px;}
-  .navtoggle{display:none;flex-direction:column;justify-content:center;gap:4px;width:42px;height:42px;background:none;border:1px solid var(--line-strong);border-radius:7px;cursor:pointer;padding:0 10px;}
-  .navtoggle span{display:block;height:2px;width:100%;background:var(--bone);border-radius:2px;transition:transform .25s,opacity .2s;}
-  .navtoggle.on span:nth-child(1){transform:translateY(6px) rotate(45deg);}
-  .navtoggle.on span:nth-child(2){opacity:0;}
-  .navtoggle.on span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
-  .navtoggle:focus-visible{outline:2px solid var(--sun);outline-offset:2px;}
-  .mobilemenu{position:fixed;top:65px;left:0;right:0;z-index:39;background:rgba(16,30,24,.98);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line-strong);padding:14px 20px 22px;display:flex;flex-direction:column;gap:2px;transform:translateY(-14px);opacity:0;pointer-events:none;transition:transform .22s ease,opacity .22s ease;}
-  .mobilemenu.open{transform:translateY(0);opacity:1;pointer-events:auto;}
-  .mobilemenu a:not(.btn){padding:15px 4px;border-bottom:1px solid var(--line);color:var(--bone);text-decoration:none;font-family:var(--ff-display);font-weight:500;font-size:19px;text-transform:uppercase;letter-spacing:.03em;}
-  .mobilemenu a:not(.btn):active{color:var(--sun);}
-  .mobilemenu .btn{justify-content:center;}
-  @media (min-width:881px){ .mobilemenu{display:none;} }
-  @media (max-width:880px){ .nav-links{display:none;} .navtoggle{display:flex;} }
-  @media (max-width:400px){ .brand .word{display:none;} }
+  /* ---------- header ---------- */
+  .hdr{position:fixed;top:0;left:0;right:0;z-index:var(--z-header);height:64px;display:flex;align-items:center;justify-content:space-between;padding-inline:var(--gutter);background:color-mix(in srgb,var(--c-bg-deep) 82%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--c-border);transition:transform var(--t-base) var(--ease)}
+  .hdr.hide{transform:translateY(-100%)}
+  .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+  .brand svg{height:34px;width:auto;display:block}
+  .brand b{font-family:var(--f-display);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.01em}
+  .brand b i{font-style:normal;color:var(--c-accent)}
+  .hdr-nav{display:none}
+  .hdr-right{display:flex;align-items:center;gap:14px}
+  .burger{width:48px;height:48px;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:transparent;border:1px solid var(--c-border);border-radius:12px;cursor:pointer}
+  .burger span{display:block;width:22px;height:2px;background:var(--c-text);border-radius:2px;transition:transform var(--t-fast) var(--ease),opacity var(--t-fast)}
+  .menu[aria-expanded="true"] ~ *{}
+  @media (min-width:900px){
+    .hdr{height:72px}
+    .hdr-nav{display:flex;gap:28px;font:600 .95rem/1 var(--f-body)}
+    .hdr-nav a{color:var(--c-muted);text-decoration:none}
+    .hdr-nav a:hover{color:var(--c-text)}
+    .burger{display:none}
+  }
+  /* full-screen menu */
+  .overlay{position:fixed;inset:0;z-index:var(--z-menu);background:var(--c-bg-deep);display:flex;flex-direction:column;padding:88px var(--gutter) 40px;transform:translateY(-100%);transition:transform var(--t-base) var(--ease);visibility:hidden}
+  .overlay.open{transform:translateY(0);visibility:visible}
+  .overlay a{font-family:var(--f-display);font-weight:700;font-size:var(--fs-h2);text-transform:uppercase;text-decoration:none;color:var(--c-text);padding:10px 0;border-bottom:1px solid var(--c-border);opacity:0;transform:translateY(16px);transition:opacity var(--t-base) var(--ease),transform var(--t-base) var(--ease);transition-delay:calc(var(--i) * 60ms)}
+  .overlay.open a{opacity:1;transform:none}
+  .overlay a:hover{color:var(--c-accent)}
+  .overlay .btn{margin-top:auto;opacity:0;transition:opacity var(--t-base);transition-delay:.3s}
+  .overlay.open .btn{opacity:1}
+  .ovclose{position:absolute;top:16px;right:var(--gutter);width:48px;height:48px;background:transparent;border:1px solid var(--c-border);border-radius:12px;color:var(--c-text);font-size:22px;cursor:pointer}
 
-  /* hero */
-  .hero{position:relative;overflow:hidden;min-height:min(82vh,760px);display:grid;align-items:end;border-bottom:1px solid var(--line);background:var(--forest-0);}
-  .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 28%;filter:contrast(1.06) saturate(.72) brightness(.82);}
-  .hero-tone{position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,21,16,.97) 0%,rgba(12,21,16,.8) 36%,rgba(12,21,16,.3) 66%,rgba(12,21,16,.12) 100%),linear-gradient(to top,rgba(12,21,16,1) 0%,rgba(12,21,16,.1) 42%,rgba(12,21,16,.5) 100%);}
-  .hero-rays{position:absolute;top:60px;right:54px;width:190px;height:190px;z-index:1;opacity:.9;mix-blend-mode:screen;animation:spin 60s linear infinite;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-  @media (prefers-reduced-motion:reduce){ .hero-rays{animation:none;} }
-  .hero-content{position:relative;z-index:2;padding:106px 0 60px;}
-  .hero h1{font-size:clamp(50px,9.4vw,132px);font-weight:700;line-height:1.02;letter-spacing:.005em;text-transform:uppercase;margin:0 0 22px;max-width:14ch;}
-  .hero h1 .sun{color:var(--sun);}
-  .hero .lead{font-size:18px;line-height:1.55;max-width:50ch;color:var(--bone-soft);margin:0 0 26px;}
-  .hero .lead strong{color:var(--bone);font-weight:600;}
-  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
-  .credit{position:absolute;right:16px;bottom:10px;z-index:3;font-size:10.5px;color:rgba(242,238,227,.4);}
+  /* ---------- hero ---------- */
+  .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;background:var(--c-bg-deep)}
+  .hero__media{position:absolute;inset:0;z-index:0}
+  .hero__media img{width:100%;height:100%;object-fit:cover;object-position:center 46%;animation:slowzoom 16s var(--ease) forwards}
+  @keyframes slowzoom{from{transform:scale(1)}to{transform:scale(1.07)}}
+  .hero__media::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--c-bg-deep) 6%,color-mix(in srgb,var(--c-bg-deep) 55%,transparent) 42%,transparent 72%),linear-gradient(to right,color-mix(in srgb,var(--c-bg-deep) 72%,transparent),transparent 60%)}
+  .hero__sun{position:absolute;top:14%;right:8%;width:140px;height:140px;z-index:1;opacity:.9;mix-blend-mode:screen;animation:spin 60s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hero__in{position:relative;z-index:2;width:100%;padding-bottom:clamp(2.5rem,7vw,5rem);padding-top:88px}
+  .hero h1{margin:var(--s-3) 0 var(--s-3);max-width:13ch}
+  .hero h1 .ac{color:var(--c-accent)}
+  .hero__sub{font-size:1.15rem;color:var(--c-text);max-width:42ch;margin-bottom:var(--s-5)}
+  .hero__sub b{color:var(--c-accent-2);font-weight:600}
+  .hero__cta{display:flex;gap:.75rem;flex-wrap:wrap}
+  @media (min-width:900px){
+    .hero__in{display:grid;grid-template-columns:7fr 5fr}
+    .hero__cta .btn{width:auto}
+    .hero h1{margin-top:var(--s-4)}
+  }
 
-  /* video explica */
-  .vid-section{padding:64px 0 86px;border-bottom:1px solid var(--line);background:linear-gradient(to bottom,var(--forest-0),var(--forest-1));}
-  .vhead{text-align:center;max-width:640px;margin:0 auto 30px;}
-  .vhead h2{font-size:clamp(34px,4.8vw,58px);text-transform:uppercase;margin-top:12px;}
-  .vhead p{color:var(--bone-soft);font-size:16px;margin:12px 0 0;}
-  .bigvideo{position:relative;max-width:940px;margin:0 auto;border:1px solid var(--line-strong);overflow:hidden;aspect-ratio:16/9;background:var(--forest-2);box-shadow:0 50px 100px -50px rgba(0,0,0,.9);}
-  .bigvideo img{width:100%;height:100%;object-fit:cover;filter:saturate(.6) contrast(1.05) brightness(.55);}
-  .bigvideo .ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px;}
-  .bigvideo .play{width:84px;height:84px;border-radius:50%;background:var(--sun);color:var(--sun-ink);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 0 12px rgba(247,148,29,.15);transition:transform .15s,background .15s;}
-  .bigvideo .play:hover{background:var(--sun-2);transform:scale(1.06);}
-  .bigvideo .cap{font-family:var(--ff-display);font-weight:600;font-size:clamp(24px,3vw,34px);text-transform:uppercase;letter-spacing:.01em;}
-  .bigvideo .sub{font-size:13px;color:var(--bone-soft);}
-  .vid-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px;}
+  /* ---------- cifras banner ---------- */
+  .figs{display:grid;grid-template-columns:repeat(3,1fr)}
+  .figs .f{padding:clamp(1.5rem,5vw,2.75rem) var(--s-3);text-align:center;border-right:1px solid color-mix(in srgb,var(--c-on-accent) 18%,transparent)}
+  .figs .f:last-child{border-right:none}
+  .figs b{display:block;font-family:var(--f-display);font-weight:800;font-size:clamp(2.75rem,9vw,5rem);line-height:.9;color:var(--c-on-accent)}
+  .figs span{display:block;margin-top:.4rem;font-weight:600;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--c-on-accent) 82%,transparent)}
+  @media (max-width:560px){ .figs b{font-size:2.4rem} .figs span{font-size:.68rem} }
 
-  /* marquee */
-  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--sun);color:var(--sun-ink);overflow:hidden;white-space:nowrap;padding:11px 0;}
-  .marquee .track{display:inline-flex;animation:slide 20s linear infinite;will-change:transform;}
-  .marquee:hover .track{animation-play-state:paused;}
-  .marquee span{font-family:var(--ff-display);font-weight:600;font-size:23px;text-transform:uppercase;letter-spacing:.04em;padding:0 22px;display:inline-flex;align-items:center;gap:22px;}
-  .marquee span::after{content:"";width:7px;height:7px;background:var(--sun-ink);border-radius:50%;opacity:.7;}
-  @keyframes slide{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  /* ---------- marquee ---------- */
+  .marq{overflow:hidden;white-space:nowrap;border-block:1px solid var(--c-border);padding:14px 0;background:var(--c-bg-deep)}
+  .marq__t{display:inline-flex;animation:slide 22s linear infinite;will-change:transform}
+  .marq:hover .marq__t{animation-play-state:paused}
+  .marq span{font-family:var(--f-display);font-weight:700;font-size:1.5rem;text-transform:uppercase;letter-spacing:.04em;padding:0 20px;display:inline-flex;align-items:center;gap:20px;color:var(--c-secondary)}
+  .marq span.ac{color:var(--c-accent)}
+  .marq span::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--c-accent);opacity:.6}
+  @keyframes slide{to{transform:translateX(-50%)}}
 
-  section{padding:90px 0;}
-  @media (max-width:640px){ section{padding:56px 0;} }
-  section.alt{background:var(--forest-1);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-  .section-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;margin-bottom:42px;}
-  .section-head h2{font-size:clamp(38px,5.4vw,70px);text-transform:uppercase;margin-top:10px;max-width:20ch;}
-  .section-head p{display:none;}
-  .cta-row{margin-top:34px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  /* ---------- método pilares ---------- */
+  .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-3)}
+  @media (max-width:860px){ .pillars{grid-template-columns:1fr 1fr} }
+  @media (max-width:480px){ .pillars{grid-template-columns:1fr} }
+  .pillar{padding:clamp(1.5rem,4vw,2.25rem) var(--s-4);text-align:center;display:flex;flex-direction:column;align-items:center;gap:.7rem;border-radius:var(--r-md);background:var(--c-surface);border:1px solid var(--c-border)}
+  .pillar .ic{width:44px;height:44px;color:var(--c-accent)}
+  .pillar h3{margin:0}
+  .pillar p{font-size:.98rem;max-width:26ch;margin:0}
 
-  /* prueba social */
-  .proof-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:34px;}
-  @media (max-width:640px){ .proof-strip{grid-template-columns:1fr;} }
-  .proof-strip .cell{background:var(--forest-0);padding:26px 24px;text-align:center;}
-  .proof-strip .big{font-family:var(--ff-display);font-weight:700;font-size:clamp(40px,6vw,62px);line-height:1;color:var(--sun);}
-  .proof-strip .lbl{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--bone-soft);margin-top:8px;}
-  .tcards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-  @media (max-width:860px){ .tcards{grid-template-columns:1fr;} }
-  .tcard{border:1px solid var(--line-strong);background:var(--forest-1);padding:24px 22px;display:flex;flex-direction:column;gap:14px;}
-  .tcard .stars{color:var(--sun);letter-spacing:2px;font-size:14px;}
-  .tcard blockquote{margin:0;font-size:15px;line-height:1.55;color:var(--bone);}
-  .tcard .who{display:flex;align-items:center;gap:12px;margin-top:auto;}
-  .tcard .av{width:42px;height:42px;border-radius:50%;background:var(--brand);color:var(--bone);display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-weight:600;font-size:16px;flex:0 0 auto;}
-  .tcard .who .nm{font-weight:600;font-size:13.5px;}
-  .tcard .who .res{font-size:12px;color:var(--sage);}
-  .proof-note{font-size:12px;color:var(--ash);margin-top:18px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  /* ---------- galería ---------- */
+  .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-3)}
+  .gal figure{position:relative;margin:0;border-radius:var(--r-md);overflow:hidden;aspect-ratio:4/5;border:1px solid var(--c-border)}
+  .gal figure:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+  .gal img{width:100%;height:100%;object-fit:cover;transition:transform var(--t-slow) var(--ease)}
+  @media (hover:hover){ .gal figure:hover img{transform:scale(1.05)} }
+  .gal figure::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--c-bg-deep),transparent 55%)}
+  .gal figcaption{position:absolute;left:16px;right:16px;bottom:14px;z-index:2}
+  .gal figcaption b{font-family:var(--f-display);font-weight:700;font-size:1.35rem;text-transform:uppercase;display:block;line-height:1}
+  .gal figcaption small{color:var(--c-muted);font-size:.82rem}
+  @media (max-width:760px){
+    .gal{grid-template-columns:1fr 1fr;grid-auto-rows:1fr}
+    .gal figure:first-child{grid-column:span 2;grid-row:auto;aspect-ratio:16/11}
+  }
 
-  /* método */
-  .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
-  @media (max-width:900px){ .pillars{grid-template-columns:1fr 1fr;} }
-  @media (max-width:520px){ .pillars{grid-template-columns:1fr;} }
-  .pillar{background:var(--forest-0);padding:34px 22px;position:relative;overflow:hidden;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;}
-  .pillar::before{content:"";position:absolute;inset:0;background:radial-gradient(300px 220px at 50% 0%,var(--sage-soft),transparent 70%);opacity:0;transition:opacity .3s;}
-  .pillar:hover::before{opacity:1;}
-  .pillar .ic{width:42px;height:42px;color:var(--sun);position:relative;}
-  .pillar h3{font-size:29px;text-transform:uppercase;margin:0;}
-  .pillar p{margin:0;font-size:13.5px;color:var(--bone-soft);line-height:1.5;max-width:26ch;}
-
-  /* galería */
-  .gallery{display:grid;grid-template-columns:1.15fr .85fr .85fr;grid-template-rows:300px 300px;gap:14px;}
-  .gallery figure{margin:0;position:relative;overflow:hidden;border:1px solid var(--line-strong);background:var(--forest-2);}
-  .gallery figure:nth-child(1){grid-row:1/3;}
-  .gallery img{width:100%;height:100%;object-fit:cover;filter:saturate(.62) contrast(1.08);transition:transform .6s;}
-  .gallery figure:hover img{transform:scale(1.04);}
-  .gallery figure::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(12,21,16,.85),transparent 55%);}
-  .gallery figcaption{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;font-family:var(--ff-display);font-weight:600;font-size:23px;text-transform:uppercase;letter-spacing:.01em;line-height:1.05;}
-  .gallery figcaption small{display:block;font-family:var(--ff-body);font-weight:500;font-size:12px;text-transform:none;letter-spacing:0;color:var(--bone-soft);margin-top:6px;}
-  @media (max-width:800px){ .gallery{grid-template-columns:1fr 1fr;grid-template-rows:auto;} .gallery figure{aspect-ratio:4/5;} .gallery figure:nth-child(1){grid-column:1/-1;grid-row:auto;aspect-ratio:16/10;} }
-
-  /* cursos por módulo */
-  .courses{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-  @media (max-width:900px){ .courses{grid-template-columns:1fr 1fr;} }
-  @media (max-width:560px){ .courses{grid-template-columns:1fr;} }
-  .course{border:1px solid var(--line-strong);background:var(--forest-1);display:flex;flex-direction:column;overflow:hidden;transition:border-color .2s,transform .2s;}
-  .course:hover{border-color:var(--sun);transform:translateY(-3px);}
-  .course .cover{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--forest-2);}
-  .course .cover img{width:100%;height:100%;object-fit:cover;filter:saturate(.6) contrast(1.08) brightness(.82);transition:transform .6s;}
-  .course:hover .cover img{transform:scale(1.05);}
-  .course .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(12,21,16,.9),transparent 55%);}
-  .course .ztag{position:absolute;left:12px;top:12px;z-index:2;font-size:11px;letter-spacing:.03em;text-transform:uppercase;font-weight:800;background:rgba(12,21,16,.72);border:1px solid var(--line-strong);padding:5px 10px;color:var(--sun);}
-  .course .cbody{padding:20px 20px 22px;display:flex;flex-direction:column;gap:12px;flex:1;}
-  .course h3{font-size:28px;text-transform:uppercase;}
-  .course .cdesc{font-size:13px;color:var(--bone-soft);line-height:1.5;margin:0;}
-  .course ul{list-style:none;margin:0;padding:0;display:grid;gap:7px;}
-  .course li{display:flex;gap:8px;font-size:12.5px;color:var(--bone-soft);align-items:flex-start;}
-  .course li svg{flex:0 0 auto;color:var(--sun);margin-top:2px;}
-  .course .cfoot{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:14px;}
-  .course .cp{font-family:var(--ff-display);font-weight:700;font-size:26px;color:var(--bone);line-height:1;}
-  .course .cp small{display:block;font-family:var(--ff-body);font-weight:500;font-size:10.5px;color:var(--ash);letter-spacing:.03em;text-transform:uppercase;margin-top:5px;}
-  .course.pack{border-color:var(--sun);background:linear-gradient(170deg,#1C2A1A,#12201A);grid-column:1/-1;}
-  .course.pack .inner{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center;padding:28px 26px;}
-  @media (max-width:700px){ .course.pack .inner{grid-template-columns:1fr;gap:18px;} }
-  .course.pack .ptag{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--sun);font-weight:800;}
-  .course.pack h3{font-size:36px;margin:8px 0 10px;}
-  .course.pack p{margin:0;font-size:14px;color:var(--bone-soft);line-height:1.55;}
-  .course.pack .side{display:flex;flex-direction:column;gap:12px;}
-  .course.pack .cp{font-size:40px;}
-  .course.pack .btn{width:100%;}
-  .courses-note{font-size:13px;color:var(--bone-soft);margin-top:18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-  .courses-note b{color:var(--sun);}
-
-  .audience{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px;}
-  @media (max-width:640px){ .audience{grid-template-columns:1fr;} }
-  .aud{border:1px solid var(--line);background:var(--forest-1);padding:20px 22px;}
-  .aud h4{font-family:var(--ff-display);font-size:21px;font-weight:600;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-  .aud.yes h4{color:var(--sage);} .aud.no h4{color:var(--bone-soft);}
-  .aud ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;}
-  .aud li{display:flex;gap:9px;font-size:13.5px;color:var(--bone-soft);align-items:flex-start;}
-  .aud li svg{flex:0 0 auto;margin-top:3px;}
-  .aud.yes li svg{color:var(--sage);} .aud.no li svg{color:var(--ash);}
-
-  /* planes */
-  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-  @media (max-width:900px){ .plans{grid-template-columns:1fr 1fr;} }
-  @media (max-width:600px){ .plans{grid-template-columns:1fr;} }
-  .plan{position:relative;border:1px solid var(--line-strong);background:var(--forest-1);padding:26px 24px 24px;display:flex;flex-direction:column;}
-  .plan.hot{border-color:var(--sun);background:linear-gradient(170deg,#1C2A1A,#12201A);}
-  .plan.hot::before{content:"Con guía de Sol";position:absolute;top:-12px;left:20px;background:var(--sun);color:var(--sun-ink);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 10px;border-radius:4px;font-family:var(--ff-body);}
-  .plan .kind{font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;color:var(--ash);font-weight:700;min-height:15px;}
-  .plan h3{font-size:30px;text-transform:uppercase;margin:8px 0 10px;}
-  .plan .desc{font-size:13px;color:var(--bone-soft);line-height:1.5;margin:0 0 14px;min-height:38px;}
-  .plan .urg{font-size:11.5px;color:var(--sun);font-weight:600;margin-bottom:10px;min-height:16px;}
-  .price{display:flex;align-items:baseline;gap:6px;margin:auto 0 4px;}
-  .price .amt{font-family:var(--ff-display);font-size:42px;font-weight:700;line-height:1;color:var(--bone);}
-  .price .per{font-size:13px;color:var(--ash);}
-  .plan .btn{width:100%;margin-top:18px;}
-  .pases{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px;}
-  @media (max-width:600px){ .pases{grid-template-columns:1fr;} }
-  .pase{border:1px solid var(--line);background:var(--forest-2);}
-  .pase button{background:none;border:none;cursor:pointer;color:inherit;font:inherit;text-align:left;width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;}
-  .pase .pl{font-family:var(--ff-display);font-weight:600;font-size:24px;text-transform:uppercase;line-height:1;}
-  .pase .pl small{display:block;font-family:var(--ff-body);font-weight:500;font-size:11.5px;text-transform:none;color:var(--ash);margin-top:4px;}
-  .pase .pr{font-family:var(--ff-display);font-weight:700;font-size:28px;color:var(--sun);line-height:1;white-space:nowrap;}
-  .pase:hover{border-color:var(--sun);}
-  .where{margin-top:22px;border:1px solid var(--line);background:var(--forest-2);padding:20px 22px;display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center;font-size:14px;color:var(--bone-soft);}
-  .where b{color:var(--bone);font-weight:600;}
-  .place{max-width:760px;margin:38px auto 0;border:1px solid var(--line-strong);background:var(--forest-1);overflow:hidden;border-radius:5px;}
-  .place-map{display:block;position:relative;aspect-ratio:2.1/1;overflow:hidden;}
-  .place-map img{width:100%;height:100%;object-fit:cover;}
-  .place-map::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(12,21,16,.5),transparent 55%);pointer-events:none;}
-  .place-see{position:absolute;right:12px;bottom:12px;z-index:2;font-size:12px;font-weight:700;background:rgba(12,21,16,.82);border:1px solid var(--line-strong);color:var(--bone);padding:7px 11px;border-radius:6px;}
-  .place-map:hover .place-see{color:var(--sun);border-color:var(--sun);}
-  .place-info{padding:24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;}
-  .place-info h3{font-family:var(--ff-display);font-size:30px;font-weight:600;text-transform:uppercase;margin:0;}
-  .place-addr{margin:0;font-size:15px;color:var(--bone-soft);}
-  .place-hours{display:inline-flex;align-items:center;gap:12px;margin:12px 0 6px;border:1px solid var(--line);background:var(--forest-2);padding:11px 18px;border-radius:99px;}
-  .place-hours svg{color:var(--sun);flex:0 0 auto;}
-  .place-k{display:block;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ash);font-weight:700;}
-  .place-hours b{font-family:var(--ff-num);font-size:18px;font-weight:800;color:var(--bone);font-variant-numeric:tabular-nums;}
-
-  /* online */
-  .online-card{border:1px solid var(--line-strong);background:linear-gradient(150deg,#16281D,#101E18);padding:34px 32px;display:grid;grid-template-columns:1.3fr .7fr;gap:30px;align-items:center;}
-  @media (max-width:760px){ .online-card{grid-template-columns:1fr;} }
-  .online-card h3{font-size:38px;text-transform:uppercase;margin:10px 0 12px;}
-  .online-card ul{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px;}
-  .online-card li{display:flex;gap:10px;font-size:14px;align-items:flex-start;}
-  .online-card li svg{flex:0 0 auto;color:var(--sun);margin-top:3px;}
-  .online-price{text-align:center;border-left:1px solid var(--line);padding-left:30px;}
-  @media (max-width:760px){ .online-price{border-left:none;padding-left:0;border-top:1px solid var(--line);padding-top:24px;text-align:left;} }
-  .online-price .amt{font-family:var(--ff-display);font-size:56px;font-weight:700;line-height:.9;color:var(--sun);}
-  .online-price .per{font-size:13px;color:var(--ash);margin-bottom:18px;}
-
-  /* app tablet */
-  .app-layout{display:grid;grid-template-columns:.8fr 1.2fr;gap:52px;align-items:center;}
-  @media (max-width:860px){ .app-layout{grid-template-columns:1fr;gap:40px;} }
-  .feature{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:20px 0;border-top:1px solid var(--line);}
-  .feature:first-of-type{border-top:none;}
-  .feature .ic{width:44px;height:44px;border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;color:var(--sun);background:var(--forest-2);}
-  .feature h3{font-size:22px;text-transform:uppercase;margin-bottom:4px;}
-  .feature p{margin:0;font-size:14px;color:var(--bone-soft);line-height:1.55;}
-  .stores{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap;}
-  .store{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line-strong);padding:9px 14px;font-size:12.5px;color:var(--bone-soft);}
-  .store svg{color:var(--bone);}
-  .appnote{font-size:12px;color:var(--ash);margin-top:18px;}
-  /* realistic tablet */
-  .tabletwrap{perspective:1600px;}
-  .tablet{width:100%;max-width:600px;margin:0 auto;aspect-ratio:1.42/1;background:linear-gradient(150deg,#3a3d40,#17191b 60%);border-radius:30px;padding:16px;position:relative;box-shadow:0 60px 110px -40px rgba(0,0,0,.95),0 2px 0 rgba(255,255,255,.08) inset,0 0 0 1px rgba(0,0,0,.5);}
-  .tablet::before{content:"";position:absolute;inset:7px;border-radius:24px;background:#0a0b0a;}
-  .tablet .cam{position:absolute;top:50%;left:12px;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:#05070a;box-shadow:0 0 0 2px rgba(255,255,255,.06);z-index:3;}
-  .tscreen{position:relative;z-index:2;height:100%;background:var(--forest-0);border-radius:18px;overflow:hidden;display:grid;grid-template-columns:34% 1fr;box-shadow:0 0 0 2px #000;}
-  .tscreen::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.08),transparent 30%);}
-  .trail{background:var(--forest-1);border-right:1px solid var(--line);padding:16px 14px;display:flex;flex-direction:column;gap:6px;}
-  .trail .tbrand{display:flex;align-items:center;gap:7px;font-family:var(--ff-display);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:12px;}
-  .trail .tbrand span{color:var(--sun);}
-  .tnav{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:12px;color:var(--bone-soft);font-weight:500;}
-  .tnav svg{width:15px;height:15px;flex:0 0 auto;}
-  .tnav.on{background:var(--sun);color:var(--sun-ink);font-weight:700;}
-  .tmain{padding:18px 18px;overflow:hidden;}
-  .tmain .thi{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--sun);font-weight:700;}
-  .tmain h4{font-family:var(--ff-display);font-size:clamp(22px,3vw,30px);font-weight:600;text-transform:uppercase;margin:3px 0 12px;line-height:1;}
-  .tex{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:12.5px;color:var(--bone-soft);}
-  .tex:first-of-type{border-top:none;}
-  .tex b{color:var(--bone);font-weight:600;font-family:var(--ff-display);}
-  .tstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;}
-  .tstats div{border:1px solid var(--line);background:var(--forest-2);padding:9px;text-align:center;}
-  .tstats b{display:block;font-family:var(--ff-display);font-size:22px;font-weight:700;color:var(--sun);line-height:1;}
-  .tstats span{font-size:9px;color:var(--ash);text-transform:uppercase;letter-spacing:.06em;}
-  @media (max-width:420px){ .tscreen{grid-template-columns:32% 1fr;} .trail .tnav span{display:none;} }
-
-  /* conoce a sol */
-  .sol-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:center;}
-  @media (max-width:860px){ .sol-layout{grid-template-columns:1fr;gap:30px;} }
-  .solphoto{position:relative;border:1px solid var(--line-strong);overflow:hidden;aspect-ratio:4/5;background:var(--forest-2);}
-  .solphoto img{width:100%;height:100%;object-fit:cover;object-position:center 20%;filter:saturate(.6) contrast(1.06);}
-  .solphoto .ph{position:absolute;inset:0;display:flex;align-items:flex-end;padding:18px;}
-  .solphoto::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(12,21,16,.7),transparent 50%);}
-  .quote{font-family:var(--ff-display);font-size:clamp(28px,3.8vw,44px);font-weight:600;text-transform:uppercase;line-height:1.05;margin:16px 0 20px;}
-  .quote em{font-style:normal;color:var(--sun);}
-  .sol-layout p.body{font-size:15px;line-height:1.7;color:var(--bone-soft);margin:0 0 14px;}
-  .sol-layout p.body strong{color:var(--bone);font-weight:600;}
-  .creds{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
-  .creds span{font-size:12px;border:1px solid var(--line-strong);padding:6px 11px;color:var(--bone-soft);border-radius:4px;}
-
-  /* garantía + faq */
-  .guarantee{border:1px solid var(--sun);background:var(--sage-soft);padding:26px 28px;display:flex;align-items:center;gap:22px;margin-bottom:40px;flex-wrap:wrap;}
-  .guarantee .medal{width:54px;height:54px;flex:0 0 auto;}
-  .guarantee h3{font-size:26px;text-transform:uppercase;margin-bottom:4px;}
-  .guarantee p{margin:0;font-size:14px;color:var(--bone-soft);max-width:62ch;}
-  .faq{max-width:820px;}
-  .faq details{border-top:1px solid var(--line);}
-  .faq details:last-child{border-bottom:1px solid var(--line);}
-  .faq summary{cursor:pointer;list-style:none;padding:20px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--ff-display);font-size:21px;font-weight:500;text-transform:uppercase;letter-spacing:.01em;}
-  .faq summary::-webkit-details-marker{display:none;}
-  .faq summary::after{content:"+";color:var(--sun);font-size:28px;font-weight:300;transition:transform .2s;}
-  .faq details[open] summary::after{transform:rotate(45deg);}
-  .faq p{margin:0 0 20px;font-size:14.5px;color:var(--bone-soft);line-height:1.65;max-width:66ch;}
-
-  .final{position:relative;overflow:hidden;border-top:1px solid var(--line);padding:112px 0;text-align:center;}
-  .final img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.45) brightness(.4);}
-  .final::after{content:"";position:absolute;inset:0;background:radial-gradient(700px 400px at 50% 100%,var(--glow),transparent 70%),linear-gradient(to bottom,var(--forest-0),rgba(12,21,16,.6) 40%,var(--forest-0));}
-  .final .wrap{position:relative;z-index:2;}
-  .final h2{font-size:clamp(46px,7.4vw,114px);font-weight:700;text-transform:uppercase;line-height:1.06;letter-spacing:.005em;}
-  .final h2 .sun{color:var(--sun);}
-  .final p{font-size:16px;color:var(--bone-soft);max-width:48ch;margin:22px auto 32px;}
-
-  footer{border-top:1px solid var(--line);padding:42px 0 48px;background:var(--forest-0);}
-  .foot{display:grid;grid-template-columns:1.6fr 1fr;gap:40px;}
-  @media (max-width:640px){ .foot{grid-template-columns:1fr;gap:26px;} }
-  .foot h4{font-family:var(--ff-display);font-size:20px;font-weight:600;text-transform:uppercase;margin-bottom:10px;}
-  .foot p,.foot a{font-size:13px;color:var(--bone-soft);line-height:1.8;text-decoration:none;}
-  .foot a:hover{color:var(--sun);}
-  .foot .links{display:flex;flex-direction:column;}
-  .foot-base{border-top:1px solid var(--line);margin-top:30px;padding-top:20px;font-size:12px;color:var(--ash);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-
-  .wafloat{position:fixed;right:20px;bottom:20px;z-index:60;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.4);text-decoration:none;}
-  .wafloat svg{width:30px;height:30px;color:#0b241a;}
-  .wafloat:focus-visible{outline:2px solid var(--sun);outline-offset:3px;}
-
-  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:80;opacity:0;pointer-events:none;transition:opacity .25s;}
-  .scrim.open{opacity:1;pointer-events:auto;}
-  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);z-index:90;background:var(--forest-1);border-left:1px solid var(--line-strong);transform:translateX(100%);transition:transform .3s;display:flex;flex-direction:column;overflow-y:auto;}
-  .drawer.open{transform:translateX(0);}
-  @media (prefers-reduced-motion:reduce){ .drawer,.scrim{transition:none;} }
-  .drawer header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--line);}
-  .drawer header h3{font-size:26px;text-transform:uppercase;}
-  .xbtn{background:none;border:1px solid var(--line-strong);color:var(--bone);width:36px;height:36px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
-  .drawer .inner{padding:24px;display:flex;flex-direction:column;gap:18px;flex:1;}
-  .summary{border:1px solid var(--line-strong);padding:16px;background:var(--forest-0);}
-  .summary .kind{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ash);font-weight:700;}
-  .summary .name{font-family:var(--ff-display);font-size:26px;font-weight:600;text-transform:uppercase;line-height:1;margin:4px 0 10px;}
-  .summary .line{display:flex;justify-content:space-between;font-size:13.5px;padding:7px 0;border-top:1px solid var(--line);color:var(--bone-soft);}
-  .summary .line b{color:var(--bone);}
-  .summary .line.total{font-size:15px;}
-  .summary .line.total b{font-family:var(--ff-display);font-size:26px;font-weight:700;}
-  .mp{display:flex;align-items:center;gap:12px;border:1px solid var(--line-strong);padding:14px;background:var(--forest-0);}
-  .mp .dot{width:38px;height:38px;border-radius:8px;background:#009EE3;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
-  .mp .dot svg{color:#fff;}
-  .mp .t{font-size:13px;} .mp .t b{display:block;color:var(--bone);font-weight:600;font-size:14px;}
-  .field{display:flex;flex-direction:column;gap:6px;}
-  .field label{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ash);font-weight:700;}
-  .field input{background:var(--forest-0);border:1px solid var(--line-strong);color:var(--bone);padding:12px 14px;font-family:var(--ff-body);font-size:14px;}
-  .field input:focus{outline:none;border-color:var(--sun);}
-  .fine{font-size:12px;color:var(--ash);line-height:1.55;}
-  .drawer .btn{width:100%;}
-  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);z-index:100;background:var(--bone);color:var(--forest-0);padding:14px 18px;font-size:13.5px;font-weight:500;max-width:min(520px,92vw);opacity:0;pointer-events:none;transition:all .25s;border-left:4px solid var(--sun);}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-  .cookies{position:fixed;left:0;right:0;bottom:0;z-index:70;background:var(--forest-2);border-top:1px solid var(--line-strong);padding:16px 0;display:none;}
-  .cookies.show{display:block;}
-  .cookies .wrap{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
-  .cookies p{margin:0;flex:1;min-width:240px;font-size:13px;color:var(--bone-soft);}
-  .cookies .btn{padding:10px 18px;}
-
-  /* ---------- números en sans limpia + estados ---------- */
-  .proof-strip .big,.price .amt,.course .cp,.pase .pr,.online-price .amt,.buybox .cprice .amt,.summary .line.total b,.tstats b,.tex b,.step .n{font-family:var(--ff-num);font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:-.01em;}
-  .toast.ok{border-left-color:var(--success);}
-  .toast.err{border-left-color:var(--danger);}
+  /* ---------- cursos ---------- */
+  .courses{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-3)}
+  @media (max-width:860px){ .courses{grid-template-columns:1fr 1fr} }
+  @media (max-width:560px){ .courses{grid-template-columns:1fr} }
+  .course{display:flex;flex-direction:column;overflow:hidden;border-radius:var(--r-lg);background:var(--c-surface);border:1px solid var(--c-border);transition:transform var(--t-fast) var(--ease),border-color var(--t-fast)}
+  @media (hover:hover){ .course:hover{transform:translateY(-4px);border-color:var(--c-accent)} }
+  .course .cov{position:relative;aspect-ratio:16/11;overflow:hidden}
+  .course .cov img{width:100%;height:100%;object-fit:cover;filter:brightness(.9)}
+  .course .cov::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(16,48,31,.9),transparent 55%)}
+  .course .zt{position:absolute;left:12px;top:12px;z-index:2;font:700 .72rem/1 var(--f-body);letter-spacing:.04em;text-transform:uppercase;color:var(--c-on-accent);background:var(--c-accent);padding:5px 10px;border-radius:var(--r-full)}
+  .course .cb{padding:var(--s-4);display:flex;flex-direction:column;gap:.7rem;flex:1}
+  .course h3{margin:0}
+  .course p{font-size:.92rem;margin:0}
+  .course ul{list-style:none;padding:0;margin:0;display:grid;gap:.4rem}
+  .course li{display:flex;gap:8px;font-size:.86rem;color:var(--c-muted)}
+  .course li svg{color:var(--c-secondary);flex:0 0 auto}
+  .course .cf{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;border-top:1px solid var(--c-border);padding-top:14px}
+  .course .pr{font-family:var(--f-display);font-weight:800;font-size:1.7rem;color:var(--c-accent);line-height:1}
+  .course .pr small{display:block;font-family:var(--f-body);font-weight:500;font-size:.66rem;letter-spacing:.04em;text-transform:uppercase;color:var(--c-muted);margin-top:4px}
+  .pack{grid-column:1/-1;border-color:var(--c-accent);background:color-mix(in srgb,var(--c-accent) 10%,var(--c-surface))}
+  .pack .in{display:grid;grid-template-columns:1.2fr .8fr;gap:var(--s-4);align-items:center;padding:var(--s-5)}
+  @media (max-width:680px){ .pack .in{grid-template-columns:1fr} }
+  .pack h3{font-size:clamp(1.8rem,4vw,2.6rem)}
+  .pack .pr{font-size:2.4rem}
+  .aud{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3);margin-top:var(--s-5)}
+  @media (max-width:560px){ .aud{grid-template-columns:1fr} }
+  .aud>div{border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);padding:var(--s-4)}
+  .aud h3{font-size:1.25rem;display:flex;align-items:center;gap:8px;margin-bottom:.6rem}
+  .aud.ok h3{color:var(--c-secondary)} .aud.no h3{color:var(--c-muted)}
+  .aud ul{list-style:none;padding:0;margin:0;display:grid;gap:.5rem}
+  .aud li{display:flex;gap:8px;font-size:.92rem;color:var(--c-muted)}
 
   /* ---------- cómo pagar ---------- */
-  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
-  @media (max-width:800px){ .steps{grid-template-columns:1fr 1fr;} }
-  @media (max-width:460px){ .steps{grid-template-columns:1fr;} }
-  .step{background:var(--forest-1);padding:26px 22px 28px;}
-  .step .n{font-size:46px;line-height:1;color:var(--sun);}
-  .step h3{font-size:22px;text-transform:uppercase;margin:12px 0 8px;}
-  .step p{margin:0;font-size:13.5px;color:var(--bone-soft);line-height:1.55;}
-  .pay-logos{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-  .pay-logos span{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line-strong);padding:5px 9px;color:var(--bone-soft);}
-  .pay-note{margin-top:22px;border:1px solid var(--success);background:var(--success-soft);padding:18px 22px;font-size:14px;color:var(--bone-soft);display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;}
-  .pay-note b{color:var(--bone);font-weight:600;}
-  .pay-badge{font-family:var(--ff-display);font-weight:600;font-size:18px;letter-spacing:.04em;text-transform:uppercase;color:var(--sun);border:1px solid var(--line-strong);padding:5px 10px;}
-  .pay-marquee{overflow:hidden;white-space:nowrap;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);background:var(--forest-2);padding:15px 0;margin-top:26px;}
-  .pay-marquee .ptrack{display:inline-flex;animation:slide 24s linear infinite;will-change:transform;}
-  .pay-marquee span{font-family:var(--ff-display);font-weight:600;font-size:21px;text-transform:uppercase;letter-spacing:.03em;padding:0 20px;display:inline-flex;align-items:center;gap:20px;color:var(--bone-soft);}
-  .pay-marquee span.hl{color:var(--sun);}
-  .pay-marquee span::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--sun);opacity:.55;flex:0 0 auto;}
-  .pay-fine{margin-top:16px;font-size:14px;color:var(--bone-soft);text-align:center;}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-3)}
+  @media (max-width:820px){ .steps{grid-template-columns:1fr 1fr} }
+  @media (max-width:440px){ .steps{grid-template-columns:1fr} }
+  .step{border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);padding:var(--s-4)}
+  .step b{font-family:var(--f-display);font-weight:800;font-size:2.6rem;color:var(--c-secondary);line-height:1;display:block}
+  .step h3{font-size:1.2rem;margin:.5rem 0 .3rem}
+  .step p{font-size:.9rem;margin:0}
+  .pay-marq{overflow:hidden;white-space:nowrap;background:var(--c-accent);color:var(--c-on-accent);padding:15px 0;margin-top:var(--s-6)}
+  .pay-marq .marq__t{animation-duration:18s}
+  .pay-marq span{font-family:var(--f-display);font-weight:700;font-size:1.3rem;text-transform:uppercase;letter-spacing:.05em;padding:0 18px;display:inline-flex;align-items:center;gap:18px;color:color-mix(in srgb,var(--c-on-accent) 80%,transparent)}
+  .pay-marq span.ac{color:var(--c-on-accent)}
+  .pay-marq span::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--c-on-accent);opacity:.55}
+  .pay-fine{margin-top:var(--s-4);font-size:.9rem;text-align:center;color:var(--c-muted)}
 
-  /* ---------- movimiento ---------- */
-  @keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-  .tablet{animation:floaty 6.5s ease-in-out infinite;}
-  @media (prefers-reduced-motion:reduce){ .tablet{animation:none;} }
+  /* ---------- app ---------- */
+  .app{display:grid;grid-template-columns:.85fr 1.15fr;gap:var(--s-7);align-items:center}
+  @media (max-width:860px){ .app{grid-template-columns:1fr;gap:var(--s-6)} }
+  .feat{display:grid;grid-template-columns:46px 1fr;gap:var(--s-3);padding:var(--s-4) 0;border-top:1px solid var(--c-border)}
+  .feat:first-of-type{border-top:none}
+  .feat .ic{width:46px;height:46px;border:1px solid var(--c-border);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--c-accent);background:var(--c-surface)}
+  .feat h3{font-size:1.2rem}
+  .feat p{font-size:.92rem;margin:.2rem 0 0}
+  .appn{font-size:.85rem;color:var(--c-muted);margin-top:var(--s-4)}
+  .tablet-img{width:100%;max-width:620px;margin-inline:auto;display:block;animation:floaty 6.5s var(--ease) infinite}
+  .tablet{width:100%;max-width:560px;margin-inline:auto;aspect-ratio:1.42/1;background:linear-gradient(150deg,#3a3d40,#17191b 60%);border-radius:26px;padding:14px;position:relative;box-shadow:0 50px 90px -40px rgba(0,0,0,.8);animation:floaty 6.5s var(--ease) infinite}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .tablet::before{content:"";position:absolute;inset:7px;border-radius:20px;background:#0a0b0a}
+  .tscreen{position:relative;z-index:2;height:100%;background:var(--c-bg-deep);border-radius:16px;overflow:hidden;display:grid;grid-template-columns:34% 1fr}
+  .trail{background:color-mix(in srgb,var(--c-secondary) 10%,var(--c-bg-deep));border-right:1px solid var(--c-border);padding:14px 12px;display:flex;flex-direction:column;gap:5px}
+  .trail .tb{font-family:var(--f-display);font-weight:800;font-size:15px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .trail .tb i{font-style:normal;color:var(--c-accent)}
+  .tnav{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:8px;font-size:11.5px;color:var(--c-muted)}
+  .tnav svg{width:14px;height:14px}
+  .tnav.on{background:var(--c-accent);color:var(--c-on-accent);font-weight:700}
+  .tmain{padding:16px}
+  .tmain .thi{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--c-accent);font-weight:700}
+  .tmain h3{font-family:var(--f-display);font-size:clamp(20px,3vw,28px);font-weight:800;text-transform:uppercase;margin:3px 0 10px}
+  .tex{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--c-border);font-size:12px;color:var(--c-muted)}
+  .tex:first-of-type{border-top:none}
+  .tex b{color:var(--c-text);font-family:var(--f-display);font-weight:700}
+  .tstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:12px}
+  .tstats div{border:1px solid var(--c-border);border-radius:8px;background:var(--c-surface);padding:8px;text-align:center}
+  .tstats b{display:block;font-family:var(--f-display);font-size:20px;font-weight:800;color:var(--c-accent);line-height:1}
+  .tstats span{font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--c-muted)}
 
-  /* ---------- afinado móvil ultra pro ---------- */
-  @media (max-width:640px){
-    nav.top{padding:12px 18px;}
-    .emblem{height:34px;}
-    .brand .word{font-size:22px;}
-    .hero{min-height:auto;}
-    .hero-content{padding:88px 0 46px;}
-    .hero .lead{font-size:16px;}
-    .hero-ctas{flex-direction:column;align-items:stretch;gap:10px;}
-    .hero-ctas .btn{width:100%;}
-    .hero-rays{width:120px;height:120px;top:74px;right:16px;opacity:.75;}
-    .vid-section{padding:52px 0 64px;}
-    .vid-cta{flex-direction:column;}
-    .vid-cta .btn{width:100%;}
-    .marquee span{font-size:18px;padding:0 16px;gap:16px;}
-    .section-head{margin-bottom:30px;}
-    .cta-row{flex-direction:column;align-items:stretch;}
-    .cta-row .btn{width:100%;}
-    .cta-row .muted{text-align:center;}
-    .proof-strip .big{font-size:46px;}
-    .courses{gap:14px;}
-    .course h3{font-size:25px;}
-    .course.pack h3{font-size:30px;}
-    .course .cfoot{flex-wrap:wrap;gap:10px;}
-    .course .cfoot .btn{flex:1;}
-    .where{flex-direction:column;align-items:flex-start;gap:12px;font-size:13.5px;}
-    .online-card{padding:26px 22px;}
-    .guarantee{padding:22px 20px;gap:16px;}
-    .guarantee .medal{width:44px;height:44px;}
-    .tablet{border-radius:22px;padding:11px;}
-    .tablet::before{inset:5px;border-radius:17px;}
-    .foot-base{flex-direction:column;gap:6px;}
-    .final{padding:84px 0;}
+  /* ---------- planes (cream) ---------- */
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-3)}
+  @media (max-width:860px){ .plans{grid-template-columns:1fr 1fr} }
+  @media (max-width:560px){ .plans{grid-template-columns:1fr} }
+  .plan{position:relative;border:1px solid color-mix(in srgb,var(--c-bg-deep) 14%,transparent);border-radius:var(--r-lg);background:#fff;padding:var(--s-5) var(--s-4);display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(16,48,31,.04)}
+  .plan.hot{border:2px solid var(--c-accent);box-shadow:0 20px 50px -30px rgba(249,147,11,.5)}
+  .plan.hot::before{content:"Más conveniente";position:absolute;top:-13px;left:20px;background:var(--c-accent);color:var(--c-on-accent);font:700 .72rem/1 var(--f-body);letter-spacing:.05em;text-transform:uppercase;padding:6px 11px;border-radius:var(--r-full)}
+  .plan .k{font:700 .72rem/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--c-secondary);min-height:14px}
+  .plan h3{font-size:1.9rem;color:var(--c-bg-deep);margin:.4rem 0 .5rem}
+  .plan .d{font-size:.9rem;color:color-mix(in srgb,var(--c-bg-deep) 70%,transparent);min-height:40px;margin:0}
+  .plan .u{font-size:.8rem;font-weight:600;color:var(--c-accent);min-height:16px;margin:.6rem 0}
+  .plan .pr{font-family:var(--f-display);font-weight:800;font-size:2.6rem;color:var(--c-bg-deep);line-height:1;margin-top:auto}
+  .plan .pr span{font-family:var(--f-body);font-size:.9rem;font-weight:500;color:color-mix(in srgb,var(--c-bg-deep) 60%,transparent)}
+  .plan .btn{margin-top:var(--s-4)}
+  .plan .btn--ghost{border-color:color-mix(in srgb,var(--c-bg-deep) 24%,transparent);color:var(--c-bg-deep)}
+  @media (hover:hover){ .section--light .btn--ghost:hover{border-color:var(--c-accent);color:var(--c-accent)} }
+  .pases{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-3);margin-top:var(--s-4)}
+  @media (max-width:560px){ .pases{grid-template-columns:1fr} }
+  .pase{border:1px solid color-mix(in srgb,var(--c-bg-deep) 14%,transparent);border-radius:var(--r-md);background:#fff}
+  .pase button{width:100%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:var(--s-4);text-align:left;font:inherit;color:inherit}
+  .pase .pl{font-family:var(--f-display);font-weight:700;font-size:1.4rem;text-transform:uppercase;line-height:1;color:var(--c-bg-deep)}
+  .pase .pl small{display:block;font-family:var(--f-body);font-weight:500;font-size:.72rem;text-transform:none;color:color-mix(in srgb,var(--c-bg-deep) 55%,transparent);margin-top:3px}
+  .pase .pp{font-family:var(--f-display);font-weight:800;font-size:1.7rem;color:var(--c-accent);line-height:1}
+
+  /* ---------- mapa / ubicación ---------- */
+  .place{max-width:760px;margin:var(--s-6) auto 0;border:1px solid color-mix(in srgb,var(--c-bg-deep) 14%,transparent);border-radius:var(--r-lg);overflow:hidden;background:#fff}
+  .place a.map{display:block;position:relative;aspect-ratio:2.1/1;overflow:hidden}
+  .place a.map img{width:100%;height:100%;object-fit:cover}
+  .place a.map::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(16,48,31,.4),transparent 55%)}
+  .place .see{position:absolute;right:12px;bottom:12px;z-index:2;font:700 .78rem/1 var(--f-body);background:var(--c-bg-deep);color:var(--c-text);padding:8px 12px;border-radius:var(--r-full)}
+  .place .info{padding:var(--s-5);display:flex;flex-direction:column;align-items:center;text-align:center;gap:.5rem}
+  .place .info h3{font-size:1.9rem;color:var(--c-bg-deep)}
+  .place .info .ad{color:color-mix(in srgb,var(--c-bg-deep) 70%,transparent);margin:0}
+  .hours{display:inline-flex;align-items:center;gap:10px;border:1px solid color-mix(in srgb,var(--c-bg-deep) 14%,transparent);border-radius:var(--r-full);padding:10px 16px;margin:var(--s-2) 0}
+  .hours svg{color:var(--c-accent)}
+  .hours b{font-family:var(--f-display);font-weight:800;font-size:1.2rem;color:var(--c-bg-deep)}
+  .hours span{display:block;font:700 .64rem/1 var(--f-body);letter-spacing:.05em;text-transform:uppercase;color:color-mix(in srgb,var(--c-bg-deep) 55%,transparent)}
+
+  /* ---------- conoce a sol ---------- */
+  .sol{display:grid;grid-template-columns:7fr 5fr;gap:var(--s-7);align-items:center}
+  @media (max-width:860px){ .sol{grid-template-columns:1fr;gap:var(--s-5)} }
+  .sol__ph{position:relative;border-radius:var(--r-lg);overflow:hidden;aspect-ratio:4/5;border:1px solid var(--c-border)}
+  .sol__ph img{width:100%;height:100%;object-fit:cover}
+  .sol__ph::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(16,48,31,.55),transparent 55%)}
+  .sol__q{font-family:var(--f-display);font-weight:700;font-size:clamp(1.8rem,4vw,3rem);text-transform:uppercase;line-height:1.02;margin:var(--s-3) 0}
+  .sol__q i{font-style:normal;color:var(--c-accent)}
+  .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:var(--s-4)}
+  .chip{font:600 .82rem/1 var(--f-body);color:var(--c-text);background:color-mix(in srgb,var(--c-secondary) 16%,transparent);border:1px solid var(--c-border);border-radius:var(--r-full);padding:8px 14px}
+
+  /* ---------- testimonios ---------- */
+  .tst{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-3)}
+  @media (max-width:760px){ .tst{grid-template-columns:1fr} }
+  .tst article{display:flex;flex-direction:column;gap:.9rem;padding:var(--s-4);border-radius:var(--r-lg);background:var(--c-surface);border:1px solid var(--c-border)}
+  .tst .stars{color:var(--c-accent);letter-spacing:2px}
+  .tst blockquote{margin:0;font-size:1.02rem;color:var(--c-text)}
+  .tst .who{display:flex;align-items:center;gap:12px;margin-top:auto}
+  .tst .av{width:42px;height:42px;border-radius:50%;background:var(--c-secondary);color:var(--c-bg-deep);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-weight:700}
+  .tst .nm{font-weight:600;font-size:.9rem}
+  .tst .res{font-size:.8rem;color:var(--c-secondary)}
+  .tnote{font-size:.8rem;color:var(--c-muted);margin-top:var(--s-4);display:flex;gap:8px;align-items:center}
+  .tag-demo{font:700 .66rem/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--c-muted);border:1px solid var(--c-border);border-radius:var(--r-full);padding:4px 8px}
+
+  /* ---------- faq ---------- */
+  .faq{max-width:760px;margin-inline:auto}
+  .faq details{border-bottom:1px solid var(--c-border)}
+  .faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:var(--s-4) 0;font-family:var(--f-display);font-weight:700;font-size:1.25rem;text-transform:uppercase}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";color:var(--c-accent);font-size:1.6rem;font-weight:400;transition:transform var(--t-fast)}
+  .faq details[open] summary::after{transform:rotate(45deg)}
+  .faq p{padding-bottom:var(--s-4);max-width:64ch}
+  .guar{display:flex;align-items:center;gap:16px;border:1px solid var(--c-accent);background:color-mix(in srgb,var(--c-accent) 10%,transparent);border-radius:var(--r-lg);padding:var(--s-4) var(--s-5);margin-bottom:var(--s-5)}
+  .guar svg{width:46px;height:46px;color:var(--c-accent);flex:0 0 auto}
+  .guar h3{font-size:1.3rem}
+  .guar p{font-size:.92rem;margin:.2rem 0 0;max-width:60ch}
+
+  /* ---------- CTA final ---------- */
+  .final{position:relative;overflow:hidden;text-align:center}
+  .final img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .final::after{content:"";position:absolute;inset:0;background:color-mix(in srgb,var(--c-bg-deep) 82%,transparent);z-index:1}
+  .final .container{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
+  .final h2{max-width:16ch}
+  .final h2 .ac{color:var(--c-accent)}
+  .final p{margin:var(--s-4) 0 var(--s-5)}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--c-bg-deep);border-top:1px solid var(--c-border);padding-block:var(--s-7) var(--s-6)}
+  .foot{display:grid;grid-template-columns:1.6fr 1fr;gap:var(--s-6)}
+  @media (max-width:640px){ .foot{grid-template-columns:1fr;gap:var(--s-5)} }
+  .foot h4{font-family:var(--f-display);font-weight:800;font-size:1.3rem;text-transform:uppercase;margin-bottom:.6rem}
+  .foot p,.foot a{font-size:.9rem;color:var(--c-muted);text-decoration:none;line-height:1.9}
+  .foot a:hover{color:var(--c-accent)}
+  .foot .lk{display:flex;flex-direction:column}
+  .footbase{border-top:1px solid var(--c-border);margin-top:var(--s-5);padding-top:var(--s-4);font-size:.78rem;color:var(--c-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  /* ---------- mobile sticky bar + whatsapp ---------- */
+  .wa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:var(--z-wa);width:54px;height:54px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+  .wa svg{width:28px;height:28px;color:#0b241a}
+  .mbar{position:fixed;left:0;right:0;bottom:0;z-index:var(--z-bar);display:none;align-items:center;justify-content:space-between;gap:12px;padding:12px var(--gutter) calc(12px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--c-bg-deep) 94%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--c-border);transform:translateY(120%);transition:transform var(--t-base) var(--ease)}
+  .mbar.show{transform:translateY(0)}
+  .mbar .pr{font-family:var(--f-display);font-weight:700;font-size:1.05rem;line-height:1.05;text-transform:uppercase}
+  .mbar .pr small{display:block;font-family:var(--f-body);font-weight:500;font-size:.68rem;text-transform:none;color:var(--c-muted)}
+  .mbar .btn{width:auto;min-height:48px;flex:0 0 auto}
+  @media (max-width:899px){ .mbar{display:flex} .wa{bottom:calc(84px + env(safe-area-inset-bottom))} }
+
+  /* ---------- checkout drawer ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:85;opacity:0;pointer-events:none;transition:opacity var(--t-fast)}
+  .scrim.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);z-index:var(--z-drawer);background:var(--c-bg-deep);border-left:1px solid var(--c-border);transform:translateX(100%);transition:transform var(--t-base) var(--ease);display:flex;flex-direction:column;overflow-y:auto}
+  .drawer.open{transform:translateX(0)}
+  .drawer header{display:flex;justify-content:space-between;align-items:center;padding:var(--s-4);border-bottom:1px solid var(--c-border)}
+  .drawer header h3{font-size:1.6rem}
+  .xb{width:40px;height:40px;background:transparent;border:1px solid var(--c-border);border-radius:10px;color:var(--c-text);font-size:18px;cursor:pointer}
+  .drawer .in{padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-4);flex:1}
+  .sum{border:1px solid var(--c-border);border-radius:var(--r-md);padding:var(--s-4);background:var(--c-surface)}
+  .sum .k{font:700 .7rem/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--c-secondary)}
+  .sum .nm{font-family:var(--f-display);font-weight:800;font-size:1.6rem;text-transform:uppercase;margin:.3rem 0 .6rem;line-height:1}
+  .sum .ln{display:flex;justify-content:space-between;font-size:.9rem;padding:.5rem 0;border-top:1px solid var(--c-border);color:var(--c-muted)}
+  .sum .ln b{color:var(--c-text)}
+  .sum .ln.tot b{font-family:var(--f-display);font-size:1.6rem;color:var(--c-accent)}
+  .mp{display:flex;align-items:center;gap:12px;border:1px solid var(--c-border);border-radius:var(--r-md);padding:var(--s-3);background:var(--c-surface)}
+  .mp .d{width:38px;height:38px;border-radius:8px;background:#009EE3;display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 auto}
+  .mp b{display:block;font-size:.95rem}
+  .mp span{font-size:.82rem;color:var(--c-muted)}
+  .fld{display:flex;flex-direction:column;gap:6px}
+  .fld label{font:700 .72rem/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--c-secondary)}
+  .fld input{background:var(--c-bg);border:1px solid var(--c-border);border-radius:10px;color:var(--c-text);padding:12px 14px;font:400 16px/1 var(--f-body)}
+  .fld input:focus{outline:none;border-color:var(--c-accent)}
+  .fine{font-size:.78rem;color:var(--c-muted)}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);z-index:var(--z-toast);background:var(--c-cream);color:var(--c-bg-deep);padding:14px 18px;border-radius:12px;font-size:.9rem;font-weight:500;max-width:min(520px,92vw);opacity:0;pointer-events:none;transition:all var(--t-fast);border-left:4px solid var(--c-accent)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.ok{border-left-color:var(--c-success)} .toast.err{border-left-color:var(--c-danger)}
+
+  /* ---------- cookies ---------- */
+  .ck{position:fixed;left:0;right:0;bottom:0;z-index:70;background:var(--c-bg-deep);border-top:1px solid var(--c-border);padding:16px 0;display:none}
+  .ck.show{display:block}
+  .ck .container{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .ck p{flex:1;min-width:240px;font-size:.86rem;margin:0}
+  .ck .btn{min-height:44px}
+
+  /* ---------- reveal ---------- */
+  .js [data-reveal]{opacity:0;transform:translateY(32px);transition:opacity var(--t-slow) var(--ease),transform var(--t-slow) var(--ease);transition-delay:calc(var(--i,0) * 90ms)}
+  .js [data-reveal].is-in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .js [data-reveal]{opacity:1;transform:none;transition:none}
+    .hero__media img,.tablet{animation:none}
+    html{scroll-behavior:auto}
   }
-  /* ---------- legibilidad móvil: texto más grande ---------- */
-  @media (max-width:640px){
-    body{font-size:16.5px;line-height:1.6;}
-    .eyebrow{font-size:13px;}
-    .hero .lead{font-size:18px;line-height:1.55;}
-    .section-head p{font-size:17px;}
-    .btn{font-size:15.5px;padding:15px 22px;}
-    .btn-sm{font-size:14.5px;padding:12px 17px;}
-    .vhead p{font-size:16.5px;}
-    .proof-strip .lbl{font-size:13.5px;}
-    .tcard blockquote{font-size:17px;line-height:1.55;}
-    .tcard .who .nm{font-size:15px;}
-    .tcard .who .res{font-size:13.5px;}
-    .proof-note{font-size:13px;}
-    .pillar h3{font-size:29px;}
-    .pillar p{font-size:15px;}
-    .pillar .tag{font-size:11.5px;}
-    .gallery figcaption{font-size:23px;}
-    .gallery figcaption small{font-size:13px;}
-    .course h3{font-size:27px;}
-    .course .cdesc{font-size:15px;}
-    .course li{font-size:14px;}
-    .course .cp{font-size:29px;}
-    .course .cp small{font-size:12px;}
-    .course .ztag{font-size:12px;}
-    .courses-note{font-size:15px;}
-    .aud h4{font-size:20px;}
-    .aud li{font-size:15px;}
-    .plan .kind{font-size:12px;}
-    .plan .desc{font-size:15px;}
-    .plan .urg{font-size:13px;}
-    .plan .price .per{font-size:14px;}
-    .pase .pl small{font-size:13px;}
-    .where{font-size:15.5px;}
-    .online-card li{font-size:15.5px;}
-    .online-price .per{font-size:14px;}
-    .feature h3{font-size:23px;}
-    .feature p{font-size:15px;}
-    .store{font-size:13.5px;}
-    .appnote{font-size:13.5px;}
-    .sol-layout p.body{font-size:16px;}
-    .creds span{font-size:13px;}
-    .guarantee p{font-size:15px;}
-    .faq summary{font-size:22px;}
-    .faq p{font-size:16px;}
-    .final p{font-size:16.5px;}
-    .foot p,.foot a{font-size:14.5px;}
-    .foot h4{font-size:21px;}
-    .cookies p{font-size:14px;}
-    .mp .t{font-size:14px;}
-    .summary .line{font-size:14.5px;}
-    .field label{font-size:12.5px;}
-    .field input{font-size:16px;}
-    .mobilemenu a:not(.btn){font-size:21px;}
-  }
-  @media (max-width:380px){
-    .hero h1{font-size:38px;}
-    .plan h3,.pase .pl{font-size:26px;}
-  }
+  /* separador montañas */
+  .mtn{display:block;width:100%;height:28px;color:var(--c-secondary);opacity:.5}
 </style>
 
-<nav class="top">
-  <a class="brand" href="#top" aria-label="Solfit Gimnasio, inicio">
-    <svg class="emblem" viewBox="0 0 120 94" fill="none" aria-hidden="true">
-      <line x1="8" y1="62" x2="112" y2="62" stroke="var(--bone)" stroke-width="6" stroke-linecap="round"/>
-      <rect x="12" y="46" width="5" height="32" rx="1.5" fill="var(--bone)"/><rect x="20" y="50" width="4" height="24" rx="1.5" fill="var(--bone)"/><rect x="26" y="54" width="3.5" height="16" rx="1.5" fill="var(--bone)"/>
-      <rect x="103" y="46" width="5" height="32" rx="1.5" fill="var(--bone)"/><rect x="96" y="50" width="4" height="24" rx="1.5" fill="var(--bone)"/><rect x="90.5" y="54" width="3.5" height="16" rx="1.5" fill="var(--bone)"/>
-      <g stroke="var(--sun)" stroke-width="3" stroke-linecap="round">
+<!-- HEADER -->
+<header class="hdr" id="hdr">
+  <a class="brand" href="#top" aria-label="Solfit Gym, inicio">
+    <svg viewBox="0 0 120 94" fill="none" aria-hidden="true">
+      <line x1="8" y1="62" x2="112" y2="62" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+      <rect x="12" y="46" width="5" height="32" rx="1.5" fill="currentColor"/><rect x="20" y="50" width="4" height="24" rx="1.5" fill="currentColor"/><rect x="26" y="54" width="3.5" height="16" rx="1.5" fill="currentColor"/>
+      <rect x="103" y="46" width="5" height="32" rx="1.5" fill="currentColor"/><rect x="96" y="50" width="4" height="24" rx="1.5" fill="currentColor"/><rect x="90.5" y="54" width="3.5" height="16" rx="1.5" fill="currentColor"/>
+      <g stroke="#F9930B" stroke-width="3" stroke-linecap="round">
         <line x1="82.6" y1="53.8" x2="94.8" y2="49.4"/><line x1="78.4" y1="46.6" x2="88.3" y2="38.2"/><line x1="72" y1="41.2" x2="78.5" y2="30"/><line x1="64.2" y1="38.4" x2="66.4" y2="25.6"/><line x1="60" y1="38" x2="60" y2="25"/><line x1="55.8" y1="38.4" x2="53.6" y2="25.6"/><line x1="48" y1="41.2" x2="41.5" y2="30"/><line x1="41.6" y1="46.6" x2="31.7" y2="38.2"/><line x1="37.4" y1="53.8" x2="25.2" y2="49.4"/>
       </g>
-      <path d="M44 61 a16 16 0 0 1 32 0 Z" fill="var(--sun)"/>
-      <polyline points="36,84 45,73 53,81 60,71 68,81 76,73 84,84" fill="none" stroke="var(--sage)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M44 61 a16 16 0 0 1 32 0 Z" fill="#F9930B"/>
+      <polyline points="36,84 45,73 53,81 60,71 68,81 76,73 84,84" fill="none" stroke="#759B72" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    <span class="word">Solfit</span>
+    <b>Sol<i>fit</i></b>
   </a>
-  <div class="nav-links">
+  <nav class="hdr-nav" aria-label="Principal">
     <a href="#cursos">Cursos</a>
     <a href="#presencial">Presencial</a>
-    <a href="#online">Online</a>
     <a href="#app">La app</a>
     <a href="#sol">Sobre Sol</a>
+    <a href="#faq">Preguntas</a>
+  </nav>
+  <div class="hdr-right">
+    <a class="btn btn--primary btn--sm" href="#cursos" style="width:auto;display:none" id="hdrCta">Quiero mi plan</a>
+    <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   </div>
-  <div class="nav-right">
-    <a class="btn btn-sun btn-sm navcta" href="#cursos">Empezar</a>
-    <button class="navtoggle" id="navtoggle" aria-label="Abrir menú" aria-expanded="false" onclick="toggleMenu()"><span></span><span></span><span></span></button>
-  </div>
-</nav>
-<div class="mobilemenu" id="mobilemenu">
-  <a href="#cursos" onclick="closeMenu()">Cursos</a>
-  <a href="#presencial" onclick="closeMenu()">Presencial</a>
-  <a href="#online" onclick="closeMenu()">Online</a>
-  <a href="#app" onclick="closeMenu()">La app</a>
-  <a href="#sol" onclick="closeMenu()">Sobre Sol</a>
-  <a class="btn btn-sun" href="#cursos" onclick="closeMenu()" style="margin-top:10px;">Empezar ahora</a>
-</div>
-
-<header class="hero" id="top">
-  <img class="hero-img" src="hero.jpg" alt="Persona con barra sobre los hombros en un gimnasio" fetchpriority="high">
-  <svg class="hero-rays" viewBox="0 0 200 200" aria-hidden="true">
-    <g fill="none" stroke="#F7941D" stroke-width="2" stroke-linecap="round">
-      <circle cx="100" cy="100" r="22" fill="#F7941D" stroke="none"/>
-      <line x1="100" y1="12" x2="100" y2="40"/><line x1="100" y1="160" x2="100" y2="188"/>
-      <line x1="12" y1="100" x2="40" y2="100"/><line x1="160" y1="100" x2="188" y2="100"/>
-      <line x1="38" y1="38" x2="58" y2="58"/><line x1="142" y1="142" x2="162" y2="162"/>
-      <line x1="162" y1="38" x2="142" y2="58"/><line x1="58" y1="142" x2="38" y2="162"/>
-      <line x1="68" y1="18" x2="78" y2="44"/><line x1="122" y1="156" x2="132" y2="182"/>
-      <line x1="18" y1="132" x2="44" y2="122"/><line x1="156" y1="78" x2="182" y2="68"/>
-      <line x1="132" y1="18" x2="122" y2="44"/><line x1="78" y1="156" x2="68" y2="182"/>
-      <line x1="18" y1="68" x2="44" y2="78"/><line x1="156" y1="122" x2="182" y2="132"/>
-    </g>
-  </svg>
-  <div class="hero-tone" aria-hidden="true"></div>
-  <div class="wrap hero-content">
-    <h1>Entrena hoy, <span class="sun">cambia de verdad.</span></h1>
-    <p class="lead">Entrenamiento, nutrición, descanso y mentalidad en un solo método, con tu avance <strong>medido en la app</strong>.</p>
-    <div class="hero-ctas">
-      <a class="btn btn-sun" href="#video">Ver el video</a>
-      <a class="btn btn-ghost" href="#cursos">Ver los cursos</a>
-    </div>
-  </div>
-  <span class="credit">Fotos: Unsplash, uso libre</span>
 </header>
 
-<!-- VIDEO EXPLICA -->
-<section class="vid-section" id="video">
-  <div class="wrap">
-    <div class="vhead">
-      <span class="eyebrow" style="justify-content:center;">Empieza por aquí</span>
-      <h2>Sol te explica los cursos.</h2>
-      <p>En un par de minutos te cuenta de qué se trata cada curso, para quién es y cómo vas a entrenar. Míralo antes de decidir.</p>
-    </div>
-    <div class="bigvideo">
-      <img src="coach.jpg" alt="Sol presentando los cursos" loading="lazy">
-      <div class="ov">
-        <button class="play" onclick="toast('Video de presentación de Sol pendiente de grabar.')" aria-label="Reproducir presentación"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
-        <div class="cap">Sol te cuenta los cursos</div>
-        <div class="sub"><span class="todo">[SOL: grabar video de 1 a 2 min]</span></div>
+<nav class="overlay" id="menu" aria-label="Menú">
+  <button class="ovclose" id="ovclose" aria-label="Cerrar menú">✕</button>
+  <a href="#cursos" style="--i:1">Cursos</a>
+  <a href="#presencial" style="--i:2">Presencial</a>
+  <a href="#app" style="--i:3">La app</a>
+  <a href="#sol" style="--i:4">Sobre Sol</a>
+  <a href="#faq" style="--i:5">Preguntas</a>
+  <a class="btn btn--primary" href="#cursos" style="margin-top:var(--s-6)">Quiero mi plan</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero__media"><img src="gym-ext.jpg" alt="Gimnasio Solfit en Las Trancas, entre montañas" fetchpriority="high"></div>
+  <svg class="hero__sun" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#F9930B" stroke-width="2" stroke-linecap="round"><circle cx="100" cy="100" r="22" fill="#F9930B" stroke="none"/><line x1="100" y1="12" x2="100" y2="40"/><line x1="100" y1="160" x2="100" y2="188"/><line x1="12" y1="100" x2="40" y2="100"/><line x1="160" y1="100" x2="188" y2="100"/><line x1="38" y1="38" x2="58" y2="58"/><line x1="142" y1="142" x2="162" y2="162"/><line x1="162" y1="38" x2="142" y2="58"/><line x1="58" y1="142" x2="38" y2="162"/><line x1="68" y1="18" x2="78" y2="44"/><line x1="122" y1="156" x2="132" y2="182"/><line x1="18" y1="132" x2="44" y2="122"/><line x1="156" y1="78" x2="182" y2="68"/><line x1="132" y1="18" x2="122" y2="44"/><line x1="78" y1="156" x2="68" y2="182"/><line x1="18" y1="68" x2="44" y2="78"/><line x1="156" y1="122" x2="182" y2="132"/></g></svg>
+  <div class="container hero__in">
+    <div>
+      <span class="eyebrow">Solfit Gym · Las Trancas</span>
+      <h1>Entrena hoy, <span class="ac">cambia de verdad.</span></h1>
+      <p class="hero__sub">Método real en la montaña. <b>Tu avance medido en la app.</b></p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#cursos">Quiero mi plan</a>
+        <a class="btn btn--ghost" href="#video">Cómo funciona</a>
       </div>
     </div>
-    <div class="vid-cta">
-      <a class="btn btn-sun" href="#cursos">Ver los cursos y precios</a>
-      <a class="btn btn-ghost" href="#presencial">Planes del gimnasio</a>
-    </div>
+  </div>
+</header>
+
+<!-- CIFRAS -->
+<section class="banner" aria-label="Cifras">
+  <div class="figs">
+    <div class="f" data-reveal style="--i:0"><b class="num" data-count="15">15</b><span>Años entrenando</span></div>
+    <div class="f" data-reveal style="--i:1"><b class="num" data-count="1000" data-prefix="+">+1.000</b><span>Evaluaciones</span></div>
+    <div class="f" data-reveal style="--i:2"><b class="num" data-count="30">30</b><span>Alumnos activos</span></div>
   </div>
 </section>
 
-<div class="marquee" aria-hidden="true">
-  <div class="track">
-    <span>Entrenamiento</span><span>Nutrición</span><span>Descanso</span><span>Mentalidad</span>
-    <span>Entrenamiento</span><span>Nutrición</span><span>Descanso</span><span>Mentalidad</span>
-    <span>Entrenamiento</span><span>Nutrición</span><span>Descanso</span><span>Mentalidad</span>
-    <span>Entrenamiento</span><span>Nutrición</span><span>Descanso</span><span>Mentalidad</span>
+<!-- VIDEO -->
+<section class="section section--deep" id="video">
+  <div class="container center head" data-reveal>
+    <span class="eyebrow">Empieza por aquí</span>
+    <h2>Sol te explica los cursos</h2>
   </div>
-</div>
-
-<!-- PRUEBA SOCIAL -->
-<section id="resultados">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="eyebrow">Resultados reales</span><h2>Primero la prueba, después el método.</h2></div>
-      <p>Esto es lo que logran quienes entrenan con sistema en vez de improvisar. Los números y testimonios los completa Sol con datos reales.</p>
+  <div class="container" data-reveal>
+    <div style="position:relative;max-width:940px;margin-inline:auto;border-radius:var(--r-lg);overflow:hidden;aspect-ratio:16/9;border:1px solid var(--c-border)">
+      <img src="gym-bag.jpg" alt="Interior del gimnasio Solfit" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:brightness(.55)">
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px">
+        <button class="btn btn--primary" style="width:84px;height:84px;border-radius:50%;padding:0" onclick="toast('Video de Sol pendiente de grabar.')" aria-label="Reproducir"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+        <h3 style="color:var(--c-text)">Sol te cuenta el método</h3>
+        <small class="tag-demo">TODO: grabar video de 1 a 2 min</small>
+      </div>
     </div>
-    <div class="proof-strip">
-      <div class="cell"><div class="big" data-count="15">15</div><div class="lbl">Años entrenando personas</div></div>
-      <div class="cell"><div class="big" data-count="1000" data-prefix="+">+1.000</div><div class="lbl">Evaluaciones corporales hechas</div></div>
-      <div class="cell"><div class="big" data-count="30">30</div><div class="lbl">Alumnos activos</div></div>
-    </div>
-    <div class="tcards">
-      <article class="tcard"><div class="stars">★★★★★</div><blockquote>"Llevaba años entrenando sola y sin avanzar. Con el plan de Sol por fin vi cambios reales en la balanza y en la fuerza."</blockquote><div class="who"><span class="av">MP</span><div><div class="nm"><span class="todo">[SOL: nombre]</span></div><div class="res"><span class="todo">[SOL: resultado]</span></div></div></div></article>
-      <article class="tcard"><div class="stars">★★★★★</div><blockquote>"Lo que más me sirvió fue ver mi progreso en la app. Saber que iba mejorando me mantuvo constante."</blockquote><div class="who"><span class="av">JR</span><div><div class="nm"><span class="todo">[SOL: nombre]</span></div><div class="res"><span class="todo">[SOL: resultado]</span></div></div></div></article>
-      <article class="tcard"><div class="stars">★★★★★</div><blockquote>"Entreno online desde otra ciudad y siento que tengo a mi entrenadora al lado. La técnica en video salva."</blockquote><div class="who"><span class="av">CS</span><div><div class="nm"><span class="todo">[SOL: nombre]</span></div><div class="res"><span class="todo">[SOL: resultado]</span></div></div></div></article>
-    </div>
-    <p class="proof-note"><span class="demo-tag">Ejemplos</span> Testimonios de muestra. Se reemplazan por reales, con nombre, foto y permiso del alumno.</p>
-    <div class="cta-row"><a class="btn btn-sun" href="#cursos">Ver los cursos</a></div>
+    <div class="center" style="margin-top:var(--s-5)"><a class="btn btn--primary" href="#cursos">Ver los cursos</a></div>
   </div>
 </section>
+
+<!-- MARQUEE -->
+<div class="marq" aria-hidden="true"><div class="marq__t">
+  <span class="ac">Entrenamiento</span><span>Nutrición</span><span>Descanso</span><span>Mentalidad</span>
+  <span class="ac">Entrenamiento</span><span>Nutrición</span><span>Descanso</span><span>Mentalidad</span>
+  <span class="ac">Entrenamiento</span><span>Nutrición</span><span>Descanso</span><span>Mentalidad</span>
+  <span class="ac">Entrenamiento</span><span>Nutrición</span><span>Descanso</span><span>Mentalidad</span>
+</div></div>
 
 <!-- MÉTODO -->
-<section class="alt" id="metodo">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="eyebrow">El método Solfit</span><h2>Un cuerpo que rinde se sostiene en cuatro frentes.</h2></div>
-      <p>Una rutina sola no cambia nada si el resto del día la deshace. Cada curso trabaja los cuatro pilares a la vez, y la app te acompaña en los cuatro.</p>
-    </div>
-    <div class="pillars">
-      <div class="pillar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/></svg><h3>Entrenamiento</h3><p>Progresión planificada, con video de técnica en cada ejercicio.</p></div>
-      <div class="pillar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20C4 10 12 4 20 4c0 10-8 16-16 16z"/><path d="M4 20C8 16 12 12 17 9"/></svg><h3>Nutrición</h3><p>Hábitos simples que acompañan tu entrenamiento, sin dietas imposibles.</p></div>
-      <div class="pillar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/><path d="M16.8 4.3l.5 1.4 1.4.5-1.4.5-.5 1.4-.5-1.4-1.4-.5 1.4-.5z"/></svg><h3>Descanso</h3><p>Dormir y recuperar también es parte del plan. Sin descanso no hay progreso.</p></div>
-      <div class="pillar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-4 10.5c.6.5 1 1.3 1 2.1V16h6v-.4c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg><h3>Mentalidad</h3><p>Constancia y bienestar para que el hábito no dependa de la motivación.</p></div>
-    </div>
+<section class="section">
+  <div class="container center head" data-reveal>
+    <span class="eyebrow">El método Solfit</span>
+    <h2>Cuatro frentes, un sistema</h2>
+  </div>
+  <div class="container pillars">
+    <div class="pillar" data-reveal style="--i:0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/></svg><h3>Entrenamiento</h3><p>Progresión con video de técnica.</p></div>
+    <div class="pillar" data-reveal style="--i:1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20C4 10 12 4 20 4c0 10-8 16-16 16z"/><path d="M4 20C8 16 12 12 17 9"/></svg><h3>Nutrición</h3><p>Hábitos simples, sin dietas imposibles.</p></div>
+    <div class="pillar" data-reveal style="--i:2"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/><path d="M16.8 4.3l.5 1.4 1.4.5-1.4.5-.5 1.4-.5-1.4-1.4-.5 1.4-.5z"/></svg><h3>Descanso</h3><p>Recuperar también es entrenar.</p></div>
+    <div class="pillar" data-reveal style="--i:3"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-4 10.5c.6.5 1 1.3 1 2.1V16h6v-.4c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg><h3>Mentalidad</h3><p>Constancia sobre motivación.</p></div>
   </div>
 </section>
 
 <!-- GALERÍA -->
-<section>
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="eyebrow">En el gimnasio</span><h2>Así se entrena de verdad, no en teoría.</h2></div>
-      <p>Cada sesión parte con un objetivo técnico claro. La ejecución importa tanto como el peso en la barra, y Sol lo revisa contigo.</p>
-    </div>
-    <div class="gallery">
-      <figure><img src="pullup.jpg" alt="Dominadas en barra, vista posterior" loading="lazy"><figcaption>Tren superior<small>Dominadas asistidas y progresivas</small></figcaption></figure>
-      <figure><img src="deadlift.jpg" alt="Peso muerto con barra" loading="lazy"><figcaption>Fuerza con técnica<small>Carga progresiva, no al azar</small></figcaption></figure>
-      <figure><img src="coach.jpg" alt="Entrenadora corrigiendo la postura de un alumno" loading="lazy"><figcaption>Corrección en vivo<small>Acompañamiento presencial</small></figcaption></figure>
-      <figure><img src="ropes.jpg" alt="Entrenamiento con cuerdas de batalla" loading="lazy"><figcaption>Acondicionamiento<small>Intervalos con temporizador</small></figcaption></figure>
-      <figure><img src="hands.jpg" alt="Manos sujetando una barra con discos" loading="lazy"><figcaption>Series registradas<small>Peso y reps, en la app</small></figcaption></figure>
-    </div>
+<section class="section section--deep">
+  <div class="container center head" data-reveal>
+    <span class="eyebrow">En el gimnasio</span>
+    <h2>Equipamiento de verdad</h2>
+  </div>
+  <div class="container gal" data-reveal>
+    <figure><img src="gym-rack.jpg" alt="Estación funcional Force G4" loading="lazy"><figcaption><b>Estación funcional</b><small>Force G4, poleas y multipower</small></figcaption></figure>
+    <figure><img src="gym-legpress.jpg" alt="Prensa de piernas" loading="lazy"><figcaption><b>Prensa</b><small>Carga progresiva</small></figcaption></figure>
+    <figure><img src="gym-smith.jpg" alt="Máquina Smith" loading="lazy"><figcaption><b>Smith</b><small>Guiado y seguro</small></figcaption></figure>
+    <figure><img src="gym-dumbbells.jpg" alt="Mancuernas hexagonales" loading="lazy"><figcaption><b>Mancuernas</b><small>Hasta 40 kg</small></figcaption></figure>
+    <figure><img src="gym-climber.jpg" alt="Ski erg y zona funcional" loading="lazy"><figcaption><b>Cardio</b><small>Ski erg e intervalos</small></figcaption></figure>
   </div>
 </section>
 
-<!-- CURSOS POR MÓDULO -->
-<section class="alt" id="cursos">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="eyebrow">Cursos online</span><h2>Compra los cursos que quieras.</h2></div>
-      <p>Cada curso trabaja una zona del cuerpo, con rutina por semanas y video de cada ejercicio. Eliges los que te sirven, o te llevas el pack completo.</p>
-    </div>
-    <div class="courses">
-      <article class="course">
-        <div class="cover"><img src="pullup.jpg" alt="Entrenamiento de tren superior" loading="lazy"><span class="ztag">Tren superior</span></div>
-        <div class="cbody">
-          <h3>Tren superior</h3>
-          <p class="cdesc">Pecho, espalda, hombros y brazos, con progresión y técnica en video.</p>
-          <ul>
-            <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l5 5L20 7"/></svg>Rutina por semanas</li>
-            <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l5 5L20 7"/></svg>Video de cada ejercicio</li>
-          </ul>
-          <div class="cfoot"><div class="cp num todo">[SOL: precio]<small>Pago único, 12 meses</small></div><button class="btn btn-sun btn-sm" onclick="openCheckout('Curso Tren superior','[SOL: precio]','Curso online')">Comprar</button></div>
-        </div>
-      </article>
-      <article class="course">
-        <div class="cover"><img src="squat.jpg" alt="Entrenamiento de tren inferior" loading="lazy"><span class="ztag">Tren inferior</span></div>
-        <div class="cbody">
-          <h3>Tren inferior</h3>
-          <p class="cdesc">Piernas completas, fuerza y control, con variantes según tu nivel.</p>
-          <ul>
-            <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l5 5L20 7"/></svg>Rutina por semanas</li>
-            <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l5 5L20 7"/></svg>Video de cada ejercicio</li>
-          </ul>
-          <div class="cfoot"><div class="cp num todo">[SOL: precio]<small>Pago único, 12 meses</small></div><button class="btn btn-sun btn-sm" onclick="openCheckout('Curso Tren inferior','[SOL: precio]','Curso online')">Comprar</button></div>
-        </div>
-      </article>
-      <article class="course">
-        <div class="cover"><img src="deadlift.jpg" alt="Entrenamiento de glúteo" loading="lazy"><span class="ztag">Glúteo</span></div>
-        <div class="cbody">
-          <h3>Glúteo</h3>
-          <p class="cdesc">Programa de hipertrofia y forma, con carga progresiva semana a semana.</p>
-          <ul>
-            <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l5 5L20 7"/></svg>Rutina por semanas</li>
-            <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l5 5L20 7"/></svg>Video de cada ejercicio</li>
-          </ul>
-          <div class="cfoot"><div class="cp num todo">[SOL: precio]<small>Pago único, 12 meses</small></div><button class="btn btn-sun btn-sm" onclick="openCheckout('Curso Glúteo','[SOL: precio]','Curso online')">Comprar</button></div>
-        </div>
-      </article>
-      <article class="course">
-        <div class="cover"><img src="focus.jpg" alt="Entrenamiento de core" loading="lazy"><span class="ztag">Core y abdomen</span></div>
-        <div class="cbody">
-          <h3>Core y abdomen</h3>
-          <p class="cdesc">Centro fuerte, mejor postura y espalda protegida en cada levantamiento.</p>
-          <ul>
-            <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l5 5L20 7"/></svg>Rutina por semanas</li>
-            <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l5 5L20 7"/></svg>Video de cada ejercicio</li>
-          </ul>
-          <div class="cfoot"><div class="cp num todo">[SOL: precio]<small>Pago único, 12 meses</small></div><button class="btn btn-sun btn-sm" onclick="openCheckout('Curso Core y abdomen','[SOL: precio]','Curso online')">Comprar</button></div>
-        </div>
-      </article>
-      <article class="course">
-        <div class="cover"><img src="ropes.jpg" alt="Entrenamiento full body" loading="lazy"><span class="ztag">Full body</span></div>
-        <div class="cbody">
-          <h3>Full body</h3>
-          <p class="cdesc">Rutina completa de cuerpo entero, para casa o gimnasio, pocos días a la semana.</p>
-          <ul>
-            <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l5 5L20 7"/></svg>Rutina por semanas</li>
-            <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l5 5L20 7"/></svg>Video de cada ejercicio</li>
-          </ul>
-          <div class="cfoot"><div class="cp num todo">[SOL: precio]<small>Pago único, 12 meses</small></div><button class="btn btn-sun btn-sm" onclick="openCheckout('Curso Full body','[SOL: precio]','Curso online')">Comprar</button></div>
-        </div>
-      </article>
-      <article class="course pack">
-        <div class="inner">
-          <div>
-            <span class="ptag">La mejor opción</span>
-            <h3>Pack completo</h3>
-            <p>Todos los cursos, todos los módulos y todos los ejercicios en video. Un solo pago, y entrenas cualquier zona cuando quieras.</p>
-          </div>
-          <div class="side">
-            <div class="cp num todo">[SOL: precio]<small>Pago único, acceso 12 meses</small></div>
-            <button class="btn btn-sun" onclick="openCheckout('Pack completo','[SOL: precio]','Todos los cursos')">Llevar el pack completo</button>
-          </div>
-        </div>
-      </article>
-    </div>
-    <p class="courses-note"><b>Pago único por cada curso.</b> Acceso por 12 meses desde la compra. Al pagar, el curso se activa solo en tu cuenta de la app.</p>
-
-    <div class="audience">
-      <div class="aud yes">
-        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg>Para ti si</h4>
-        <ul>
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg>Entrenas pero no ves resultados claros</li>
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg>Quieres bajar grasa sin quedar sin fuerza</li>
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg>Prefieres un plan medido a improvisar cada día</li>
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg>Tienes acceso a un gimnasio o equipo básico</li>
-        </ul>
-      </div>
-      <div class="aud no">
-        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg>No es para ti si</h4>
-        <ul>
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg>Buscas una dieta milagro sin entrenar</li>
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg>Quieres resultados en una semana</li>
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg>No piensas registrar tu avance en la app</li>
-        </ul>
-      </div>
-    </div>
+<!-- CURSOS -->
+<section class="section" id="cursos">
+  <div class="container center head" data-reveal>
+    <span class="eyebrow">Cursos online</span>
+    <h2>Compra por zona</h2>
+    <p class="lead">Pago único, acceso 12 meses. Se activa solo en tu app.</p>
+  </div>
+  <div class="container courses">
+    <article class="course" data-reveal style="--i:0"><div class="cov"><img src="gym-dumbbells.jpg" alt="Curso de tren superior" loading="lazy"><span class="zt">Tren superior</span></div><div class="cb"><h3>Tren superior</h3><p>Pecho, espalda, hombros y brazos.</p><ul><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Rutina por semanas</li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Video de cada ejercicio</li></ul><div class="cf"><div class="pr"><!-- TODO: precio -->Pronto<small>Pago único</small></div><button class="btn btn--primary btn--sm" style="width:auto" onclick="buy('Curso Tren superior')">Comprar</button></div></div></article>
+    <article class="course" data-reveal style="--i:1"><div class="cov"><img src="gym-legpress.jpg" alt="Curso de tren inferior" loading="lazy"><span class="zt">Tren inferior</span></div><div class="cb"><h3>Tren inferior</h3><p>Piernas completas, fuerza y control.</p><ul><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Rutina por semanas</li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Video de cada ejercicio</li></ul><div class="cf"><div class="pr"><!-- TODO: precio -->Pronto<small>Pago único</small></div><button class="btn btn--primary btn--sm" style="width:auto" onclick="buy('Curso Tren inferior')">Comprar</button></div></div></article>
+    <article class="course" data-reveal style="--i:2"><div class="cov"><img src="gym-smith.jpg" alt="Curso de glúteo" loading="lazy"><span class="zt">Glúteo</span></div><div class="cb"><h3>Glúteo</h3><p>Hipertrofia y forma, carga progresiva.</p><ul><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Rutina por semanas</li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Video de cada ejercicio</li></ul><div class="cf"><div class="pr"><!-- TODO: precio -->Pronto<small>Pago único</small></div><button class="btn btn--primary btn--sm" style="width:auto" onclick="buy('Curso Glúteo')">Comprar</button></div></div></article>
+    <article class="course" data-reveal style="--i:0"><div class="cov"><img src="gym-climber.jpg" alt="Curso de core" loading="lazy"><span class="zt">Core</span></div><div class="cb"><h3>Core y abdomen</h3><p>Centro fuerte y mejor postura.</p><ul><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Rutina por semanas</li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Video de cada ejercicio</li></ul><div class="cf"><div class="pr"><!-- TODO: precio -->Pronto<small>Pago único</small></div><button class="btn btn--primary btn--sm" style="width:auto" onclick="buy('Curso Core y abdomen')">Comprar</button></div></div></article>
+    <article class="course" data-reveal style="--i:1"><div class="cov"><img src="gym-rack.jpg" alt="Curso full body" loading="lazy"><span class="zt">Full body</span></div><div class="cb"><h3>Full body</h3><p>Cuerpo entero, casa o gimnasio.</p><ul><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Rutina por semanas</li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Video de cada ejercicio</li></ul><div class="cf"><div class="pr"><!-- TODO: precio -->Pronto<small>Pago único</small></div><button class="btn btn--primary btn--sm" style="width:auto" onclick="buy('Curso Full body')">Comprar</button></div></div></article>
+    <article class="course pack" data-reveal><div class="in"><div><span class="eyebrow" style="color:var(--c-accent)">La mejor opción</span><h3>Pack completo</h3><p>Todos los cursos, todos los ejercicios. Un solo pago.</p></div><div><div class="pr" style="margin-bottom:var(--s-3)"><!-- TODO: precio -->Pronto<small>Acceso 12 meses</small></div><button class="btn btn--primary" onclick="buy('Pack completo')">Llevar el pack</button></div></div></article>
+  </div>
+  <div class="container aud">
+    <div class="ok" data-reveal><h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg>Para ti si</h3><ul><li>Entrenas sin ver resultados</li><li>Quieres bajar grasa sin perder músculo</li><li>Prefieres un plan medido</li></ul></div>
+    <div class="no" data-reveal style="--i:1"><h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg>No es para ti si</h3><ul><li>Buscas una dieta milagro</li><li>Quieres resultados en una semana</li><li>No vas a registrar tu avance</li></ul></div>
   </div>
 </section>
 
-<!-- COMO PAGAR -->
-<section id="compra">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="eyebrow">Cómo pagar</span><h2>Comprar es simple y seguro.</h2></div>
-      <p>Pagas en el sitio con Mercado Pago y tu curso o plan se activa solo en la app. Sin esperas ni trámites.</p>
-    </div>
-    <div class="steps">
-      <div class="step"><div class="n num">1</div><h3>Eliges tu curso o plan</h3><p>Toca "Comprar" y revisa el resumen con el total antes de pagar.</p></div>
-      <div class="step"><div class="n num">2</div><h3>Pagas con Mercado Pago</h3><p>Pago seguro con tarjeta o transferencia, en pocos pasos.</p></div>
-      <div class="step"><div class="n num">3</div><h3>Creas tu cuenta</h3><p>Usa el mismo correo del pago para que tu compra se reconozca sola.</p></div>
-      <div class="step"><div class="n num">4</div><h3>Entras y entrenas</h3><p>Abres app.solfitonline.com y tu curso o plan ya está activo.</p></div>
-    </div>
-    <div class="pay-marquee" aria-hidden="true">
-      <div class="ptrack">
-        <span class="hl">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
-        <span class="hl">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
-        <span class="hl">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
-        <span class="hl">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
-      </div>
-    </div>
-    <p class="pay-fine">No guardamos los datos de tu tarjeta. ¿Pagaste con otro correo? Te lo vinculamos por WhatsApp.</p>
+<!-- CÓMO PAGAR -->
+<section class="section section--deep" id="compra">
+  <div class="container center head" data-reveal>
+    <span class="eyebrow">Cómo pagar</span>
+    <h2>Simple y seguro</h2>
   </div>
+  <div class="container steps">
+    <div class="step" data-reveal style="--i:0"><b>1</b><h3>Elige tu curso o plan</h3><p>Revisa el total antes de pagar.</p></div>
+    <div class="step" data-reveal style="--i:1"><b>2</b><h3>Paga con Mercado Pago</h3><p>Tarjeta, débito o transferencia.</p></div>
+    <div class="step" data-reveal style="--i:2"><b>3</b><h3>Crea tu cuenta</h3><p>Con el mismo correo del pago.</p></div>
+    <div class="step" data-reveal style="--i:3"><b>4</b><h3>Entra y entrena</h3><p>Tu plan queda activo al tiro.</p></div>
+  </div>
+  <div class="pay-marq" aria-hidden="true"><div class="marq__t">
+    <span class="ac">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
+    <span class="ac">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
+    <span class="ac">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
+    <span class="ac">Pago seguro</span><span>Crédito</span><span>Débito</span><span>Transferencia</span><span>Mercado Pago</span>
+  </div></div>
+  <p class="pay-fine container">No guardamos los datos de tu tarjeta. ¿Pagaste con otro correo? Te lo vinculamos por WhatsApp.</p>
 </section>
 
-<!-- PRESENCIAL -->
-<section id="presencial">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="eyebrow">Solfit Gym · Las Trancas</span><h2>Planes mensuales y pases.</h2></div>
-      <p>Elige un plan mensual para entrenar seguido, o un pase si vienes por temporada. Todos incluyen tu cuenta en la app Solfit.</p>
-    </div>
-    <div class="plans">
-      <div class="plan"><span class="kind">Entrena por tu cuenta</span><h3>Open Gym</h3><p class="desc">Acceso libre al gimnasio con tu calendario en la app.</p><div class="urg"></div><div class="price"><span class="amt num">$38.000</span><span class="per">/ mes</span></div><button class="btn btn-ghost" onclick="openCheckout('Open Gym','$38.000','Plan mensual')">Elegir Open Gym</button></div>
-      <div class="plan hot"><span class="kind">Open Gym más asesoría</span><h3>Open Gym + Asesoría</h3><p class="desc">Sol te arma la rutina, revisa tu técnica y la ajusta según tu evaluación corporal.</p><div class="urg">Cupos limitados por agenda de Sol</div><div class="price"><span class="amt num">$50.000</span><span class="per">/ mes</span></div><button class="btn btn-sun" onclick="openCheckout('Open Gym + Asesoría','$50.000','Plan mensual')">Elegir con asesoría</button></div>
-      <div class="plan"><span class="kind">Grupo reducido</span><h3>Personalizado grupal</h3><p class="desc">8 clases al mes. Martes y jueves 9:00 y 10:30, viernes 10:30.</p><div class="urg">Grupos reducidos, cupos acotados</div><div class="price"><span class="amt num">$72.000</span><span class="per">/ mes</span></div><button class="btn btn-ghost" onclick="openCheckout('Personalizado grupal','$72.000','Plan mensual, 8 clases')">Elegir grupal</button></div>
-      <div class="plan"><span class="kind">Tu coach 100% para ti</span><h3>1 a 1</h3><p class="desc">Entrenamiento personal, uno a uno con Sol en cada sesión.</p><div class="urg">Muy pocos cupos disponibles</div><div class="price"><span class="amt num">$200.000</span><span class="per">/ mes</span></div><button class="btn btn-ghost" onclick="openCheckout('Personalizado 1 a 1','$200.000','Plan mensual')">Elegir 1 a 1</button></div>
-      <div class="plan"><span class="kind">Para dos personas</span><h3>2 x 1</h3><p class="desc">Entrenamiento personalizado para dos, en la misma sesión con Sol.</p><div class="urg">Muy pocos cupos disponibles</div><div class="price"><span class="amt num">$250.000</span><span class="per">/ mes</span></div><button class="btn btn-ghost" onclick="openCheckout('Personalizado 2 x 1','$250.000','Plan mensual, 2 personas')">Elegir 2 x 1</button></div>
-      <div class="plan" style="justify-content:center;align-items:flex-start;gap:12px;"><span class="kind">¿Dudas con el plan?</span><h3 style="font-size:24px;">Te ayudamos a elegir</h3><p class="desc">Cuéntanos tu objetivo y te recomendamos el plan que mejor te calza.</p><a class="btn btn-sage" href="#wa" onclick="waLink(event,'Hola, quiero ayuda para elegir un plan en Solfit')">Escribir por WhatsApp</a></div>
-    </div>
-    <h3 style="font-size:24px;text-transform:uppercase;margin:34px 0 4px;">Pases</h3>
-    <div class="pases">
-      <div class="pase"><button onclick="openCheckout('Pase diario','$8.000','Pase de 1 día')"><span class="pl">Diario<small>Un día de entrenamiento</small></span><span class="pr num">$8.000</span></button></div>
-      <div class="pase"><button onclick="openCheckout('Pase semanal','$20.000','Pase de 1 semana')"><span class="pl">Semanal<small>7 días seguidos</small></span><span class="pr num">$20.000</span></button></div>
-      <div class="pase"><button onclick="openCheckout('Pase 2 semanas','$30.000','Pase de 2 semanas')"><span class="pl">2 semanas<small>14 días seguidos</small></span><span class="pr num">$30.000</span></button></div>
-    </div>
-    <div class="place">
-      <a class="place-map" href="https://www.google.com/maps/search/?api=1&query=Valle+Las+Trancas,+Pinto,+Chile" target="_blank" rel="noopener" aria-label="Ver Solfit Gym en Google Maps">
-        <img src="mapa.jpg" alt="Mapa de Las Trancas, Pinto, Ñuble" loading="lazy">
-        <span class="place-see">Ver en Google Maps</span>
-      </a>
-      <div class="place-info">
-        <h3>Solfit Gym</h3>
-        <p class="place-addr">Las Trancas, Pinto, Ñuble · Gimnasio físico</p>
-        <div class="place-hours">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-          <div style="text-align:left;"><span class="place-k">Horario de atención</span><b>8:30 a 21:00 hrs</b></div>
-        </div>
-        <a class="btn btn-sun btn-sm" href="https://www.google.com/maps/search/?api=1&query=Valle+Las+Trancas,+Pinto,+Chile" target="_blank" rel="noopener">Cómo llegar</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ONLINE -->
-<section class="alt" id="online">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="eyebrow">Entrenamiento online</span><h2>Tu plan en la app, donde estés.</h2></div>
-      <p>Para quienes no pueden venir al gimnasio o entrenan en otra ciudad. Mismo método, seguimiento desde la app.</p>
-    </div>
-    <div class="online-card">
-      <div>
-        <span class="kind" style="font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;color:var(--ash);font-weight:700;">Plan online</span>
-        <h3>Entrena guiado desde casa.</h3>
-        <ul>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Rutina estructurada en la app, con video de cada ejercicio</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Registras tus series y sigues tu progreso</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Temporizador de intervalos y recordatorios</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg><span class="todo">[SOL: definir si incluye asesoría directa de Sol]</span></li>
-        </ul>
-      </div>
-      <div class="online-price">
-        <div class="amt num">$19.990</div>
-        <div class="per">/ mes <span class="todo">[SOL: confirmar]</span></div>
-        <button class="btn btn-sun" onclick="openCheckout('Plan Online','$19.990','Suscripción mensual')">Empezar online</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- APP TABLET -->
-<section id="app">
-  <div class="wrap app-layout">
-    <div>
+<!-- APP -->
+<section class="section" id="app">
+  <div class="container app">
+    <div data-reveal>
       <span class="eyebrow">La app Solfit</span>
-      <h2 style="font-size:clamp(38px,5vw,60px);text-transform:uppercase;margin:14px 0 26px;">Incluida en todos los planes.</h2>
-      <div class="feature"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20V10M10 20V4M17 20v-7"/></svg></div><div><h3>Evaluación corporal con historial</h3><p>Composición corporal y avance en el tiempo, con gráfico en cada medición.</p></div></div>
-      <div class="feature"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><div><h3>Plan con video de cada ejercicio</h3><p>Calendario con los ejercicios del día y un clip corto con la técnica. Anotas series, reps y peso en pocos toques.</p></div></div>
-      <div class="feature"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><div><h3>Temporizador de intervalos</h3><p>Rondas de trabajo y descanso configurables, con aviso al cambiar de fase.</p></div></div>
-      <div class="stores">
-        <span class="store"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 1.5c.1 1.1-.4 2.2-1.1 3-.8.9-2 1.6-3.2 1.5-.1-1.1.4-2.3 1.1-3 .8-.9 2.1-1.5 3.2-1.5zm3.9 16.5c-.6 1.3-.9 1.9-1.7 3-1.1 1.6-2.7 3.6-4.6 3.6-1.7 0-2.2-1.1-4.1-1.1s-2.4 1.1-4.1 1.1c-1.9 0-3.4-1.9-4.6-3.5C-1 17.6-.5 11 3.3 8.7c1-.6 2.3-.9 3.5-.9 1.5 0 2.8.9 3.7.9.9 0 2.5-1.1 4.2-.9 1.1.1 2.9.5 4 2.1-3.4 2.1-2.9 6.4.7 8.1z"/></svg> Próximamente en iOS</span>
-        <span class="store"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.5l1.8-3.2c.1-.2 0-.4-.2-.5-.2-.1-.4 0-.5.2L17 9.2c-1.5-.7-3.2-1-5-1s-3.5.4-5 1L5.2 6c-.1-.2-.3-.3-.5-.2-.2.1-.3.3-.2.5l1.8 3.2C3.3 11 1.4 14 1 17.5h22c-.4-3.5-2.3-6.5-5.4-8zM6.5 15c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm11 0c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1z"/></svg> Próximamente en Android</span>
-      </div>
-      <p class="appnote">Entras en app.solfitonline.com con el mismo correo de tu compra.</p>
+      <h2 style="font-size:clamp(2rem,5vw,3.4rem);margin:var(--s-2) 0 var(--s-5)">Incluida en todos los planes</h2>
+      <div class="feat"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><div><h3>Video de cada ejercicio</h3><p>La técnica correcta, siempre a mano.</p></div></div>
+      <div class="feat"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20V10M10 20V4M17 20v-7"/></svg></div><div><h3>Evaluación con historial</h3><p>Tu avance medido en el tiempo.</p></div></div>
+      <div class="feat"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></div><div><h3>Registro de series</h3><p>Peso y reps en pocos toques.</p></div></div>
+      <div class="feat"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg></div><div><h3>Temporizador</h3><p>Intervalos con aviso de fase.</p></div></div>
+      <p class="appn">Entras en app.solfitonline.com con el mismo correo de tu compra.</p>
     </div>
-    <div class="tabletwrap">
-      <div class="tablet" aria-hidden="true">
-        <span class="cam"></span>
-        <div class="tscreen">
-          <div class="trail">
-            <div class="tbrand"><span style="width:11px;height:11px;border-radius:50%;background:var(--sun);display:inline-block;box-shadow:0 0 8px var(--glow);"></span>Sol<span>fit</span></div>
-            <div class="tnav on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg><span>Hoy</span></div>
-            <div class="tnav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Plan</span></div>
-            <div class="tnav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20V10M10 20V4M17 20v-7"/></svg><span>Evaluación</span></div>
-            <div class="tnav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Cursos</span></div>
-          </div>
-          <div class="tmain">
-            <div class="thi">Hoy · Jueves</div>
-            <h4>Tren superior</h4>
-            <div class="tex"><span>Press banca mancuernas</span><b class="num">4 x 10</b></div>
-            <div class="tex"><span>Dominadas asistidas</span><b class="num">3 x 8</b></div>
-            <div class="tex"><span>Remo con barra</span><b class="num">4 x 12</b></div>
-            <div class="tex"><span>Press militar</span><b class="num">3 x 10</b></div>
-            <div class="tstats">
-              <div><b class="num" data-count="14">14</b><span>Sesiones</span></div>
-              <div><b class="num" data-count="82" data-suffix="%">82%</b><span>Asistencia</span></div>
-              <div><b class="num" data-count="6">6</b><span>Racha</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div data-reveal>
+      <img class="tablet-img" src="tablet.png" alt="App Solfit en una tablet" loading="lazy">
     </div>
   </div>
+</section>
+
+<!-- PRESENCIAL (cream) -->
+<section class="section section--light" id="presencial">
+  <div class="container center head" data-reveal>
+    <span class="eyebrow">Solfit Gym · Las Trancas</span>
+    <h2>Planes y pases</h2>
+  </div>
+  <div class="container plans">
+    <div class="plan" data-reveal style="--i:0"><span class="k">Entrena por tu cuenta</span><h3>Open Gym</h3><p class="d">Acceso libre con tu calendario en la app.</p><div class="u"></div><div class="pr">$38.000 <span>/ mes</span></div><button class="btn btn--ghost" onclick="buy('Open Gym','$38.000','Plan mensual')">Elegir</button></div>
+    <div class="plan hot" data-reveal style="--i:1"><span class="k">Con guía de Sol</span><h3>Open Gym + Asesoría</h3><p class="d">Rutina diseñada y ajustada según tu evaluación.</p><div class="u">Cupos limitados por agenda</div><div class="pr">$50.000 <span>/ mes</span></div><button class="btn btn--primary" onclick="buy('Open Gym + Asesoría','$50.000','Plan mensual')">Elegir</button></div>
+    <div class="plan" data-reveal style="--i:2"><span class="k">8 clases al mes</span><h3>Grupal</h3><p class="d">Martes y jueves 9:00 y 10:30, viernes 10:30.</p><div class="u">Grupos reducidos</div><div class="pr">$72.000 <span>/ mes</span></div><button class="btn btn--ghost" onclick="buy('Personalizado grupal','$72.000','Plan mensual')">Elegir</button></div>
+    <div class="plan" data-reveal style="--i:0"><span class="k">Tu coach para ti</span><h3>1 a 1</h3><p class="d">Entrenamiento personal, uno a uno con Sol.</p><div class="u">Muy pocos cupos</div><div class="pr">$200.000 <span>/ mes</span></div><button class="btn btn--ghost" onclick="buy('Personalizado 1 a 1','$200.000','Plan mensual')">Elegir</button></div>
+    <div class="plan" data-reveal style="--i:1"><span class="k">Para dos personas</span><h3>2 x 1</h3><p class="d">Entrenamiento personalizado para dos.</p><div class="u">Muy pocos cupos</div><div class="pr">$250.000 <span>/ mes</span></div><button class="btn btn--ghost" onclick="buy('Personalizado 2 x 1','$250.000','Plan mensual')">Elegir</button></div>
+    <div class="plan" data-reveal style="--i:2"><span class="k">Online</span><h3>Plan Online</h3><p class="d">Entrena guiado desde casa, con la app.</p><div class="u">Desde otra ciudad</div><div class="pr">$19.990 <span>/ mes</span></div><button class="btn btn--primary" onclick="buy('Plan Online','$19.990','Suscripción mensual')">Empezar</button></div>
+  </div>
+  <h3 style="color:var(--c-bg-deep);font-size:1.5rem;margin:var(--s-5) 0 var(--s-2)">Pases</h3>
+  <div class="container pases" style="padding:0">
+    <div class="pase"><button onclick="buy('Pase diario','$8.000','Pase de 1 día')"><span class="pl">Diario<small>Un día</small></span><span class="pp">$8.000</span></button></div>
+    <div class="pase"><button onclick="buy('Pase semanal','$20.000','Pase de 1 semana')"><span class="pl">Semanal<small>7 días</small></span><span class="pp">$20.000</span></button></div>
+    <div class="pase"><button onclick="buy('Pase 2 semanas','$30.000','Pase de 2 semanas')"><span class="pl">2 semanas<small>14 días</small></span><span class="pp">$30.000</span></button></div>
+  </div>
+  <div class="container"><div class="place" data-reveal>
+    <a class="map" href="https://www.google.com/maps/search/?api=1&query=Valle+Las+Trancas,+Pinto,+Chile" target="_blank" rel="noopener" aria-label="Ver Solfit Gym en Google Maps">
+      <img src="mapa.jpg" alt="Mapa de Las Trancas, Pinto, Ñuble" loading="lazy">
+      <span class="see">Ver en Google Maps</span>
+    </a>
+    <div class="info">
+      <h3>Solfit Gym</h3>
+      <p class="ad">Las Trancas, Pinto, Ñuble · Gimnasio físico</p>
+      <div class="hours"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div style="text-align:left"><span>Horario</span><b>8:30 a 21:00 hrs</b></div></div>
+      <a class="btn btn--primary btn--sm" style="width:auto" href="https://www.google.com/maps/search/?api=1&query=Valle+Las+Trancas,+Pinto,+Chile" target="_blank" rel="noopener">Cómo llegar</a>
+    </div>
+  </div></div>
 </section>
 
 <!-- CONOCE A SOL -->
-<section class="alt" id="sol">
-  <div class="wrap">
-    <div class="section-head" style="margin-bottom:34px;">
-      <div><span class="eyebrow">Quién te entrena</span><h2>Conoce a Sol.</h2></div>
-      <p>Lo que ninguna competencia puede copiar: una entrenadora de verdad, con un método, detrás de cada plan.</p>
-    </div>
-    <div class="sol-layout">
-      <div class="solphoto">
-        <img src="focus.jpg" alt="Sol, entrenadora de Solfit" loading="lazy" onerror="this.style.display='none'">
-        <div class="ph"><span class="todo">[SOL: foto real de Sol]</span></div>
-      </div>
-      <div>
-        <p class="quote">"Entrenar funciona cuando deja de ser una decisión diaria y pasa a ser <em>un sistema que sigues.</em>"</p>
-        <p class="body"><span class="todo">[SOL: su historia]</span>. Hoy está enfocada en construir un acompañamiento que no termina cuando sales del gimnasio.</p>
-        <p class="body">Por eso cada curso combina <strong>entrenamiento, nutrición, descanso y mentalidad</strong> en un solo sistema, en vez de dejarte con una rutina en papel.</p>
-        <div class="creds">
-          <span>Método de 4 pilares</span>
-          <span>Evaluación en cada etapa</span>
-          <span>Seguimiento cercano</span>
-          <span class="todo">[SOL: certificaciones]</span>
-        </div>
-        <div style="margin-top:22px;"><a class="btn btn-sun" href="#cursos">Ver los cursos</a></div>
-      </div>
+<section class="section" id="sol">
+  <div class="container sol">
+    <div class="sol__ph" data-reveal><img src="gym-sign.jpg" alt="Fachada del gimnasio Solfit en Las Trancas" loading="lazy"></div>
+    <div data-reveal style="--i:1">
+      <span class="eyebrow">Quién te entrena</span>
+      <p class="sol__q">"Entrenar funciona cuando pasa a ser <i>un sistema que sigues.</i>"</p>
+      <p><!-- TODO: historia de Sol -->Sol construye un acompañamiento que no termina cuando sales del gimnasio.</p>
+      <div class="chips"><span class="chip">Método de 4 pilares</span><span class="chip">Las Trancas</span><span class="chip">Salud integral</span></div>
+      <a class="btn btn--primary" href="#cursos" style="margin-top:var(--s-5)">Entrenar con Sol</a>
     </div>
   </div>
 </section>
 
-<!-- GARANTÍA + FAQ -->
-<section id="faq">
-  <div class="wrap">
-    <div style="text-align:center;margin-bottom:30px;">
-      <span class="eyebrow">Sin letra chica</span>
-      <h2 style="font-size:clamp(38px,5.4vw,66px);text-transform:uppercase;margin:10px 0 0;">Quitemos el miedo a empezar.</h2>
+<!-- TESTIMONIOS -->
+<section class="section section--deep">
+  <div class="container center head" data-reveal>
+    <span class="eyebrow">Resultados reales</span>
+    <h2>Lo que dicen</h2>
+  </div>
+  <div class="container tst">
+    <article><div class="stars">★★★★★</div><blockquote>"Por fin vi cambios reales en la balanza y en la fuerza."</blockquote><div class="who"><span class="av">MP</span><div><div class="nm"><!-- TODO: nombre -->Alumna</div><div class="res"><!-- TODO: resultado -->Resultado</div></div></div></article>
+    <article><div class="stars">★★★★★</div><blockquote>"Ver mi progreso en la app me mantuvo constante."</blockquote><div class="who"><span class="av">JR</span><div><div class="nm"><!-- TODO: nombre -->Alumno</div><div class="res"><!-- TODO: resultado -->Resultado</div></div></div></article>
+    <article><div class="stars">★★★★★</div><blockquote>"Entreno online y siento que tengo a mi coach al lado."</blockquote><div class="who"><span class="av">CS</span><div><div class="nm"><!-- TODO: nombre -->Alumna</div><div class="res"><!-- TODO: resultado -->Resultado</div></div></div></article>
+  </div>
+  <p class="tnote container"><span class="tag-demo">Ejemplos</span> Se reemplazan por reales, con nombre, foto y permiso.</p>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container center head" data-reveal>
+    <span class="eyebrow">Sin letra chica</span>
+    <h2>Quitemos el miedo</h2>
+  </div>
+  <div class="container">
+    <div class="guar" data-reveal>
+      <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="19" r="13" stroke="currentColor" stroke-width="2.4"/><circle cx="24" cy="19" r="8.5" stroke="currentColor" stroke-width="1.4" opacity=".6"/><path d="M19 19.5l3.3 3.3L29 16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.5 30l-3.5 11 7-3.2L24 42l3-4.2 7 3.2-3.5-11" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+      <div><h3>Garantía de cambio de programa</h3><p>Si el primer módulo no te sirve, te cambiamos de curso. Sin complicaciones.</p></div>
     </div>
-    <div class="guarantee">
-      <svg class="medal" viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="19" r="13" fill="none" stroke="var(--sun)" stroke-width="2.4"/>
-        <circle cx="24" cy="19" r="8.5" fill="none" stroke="var(--sun)" stroke-width="1.4" opacity=".6"/>
-        <path d="M19 19.5l3.3 3.3L29 16" stroke="var(--sun)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <path d="M17.5 30l-3.5 11 7-3.2L24 42l3-4.2 7 3.2-3.5-11" fill="none" stroke="var(--sun)" stroke-width="2.2" stroke-linejoin="round"/>
-      </svg>
-      <div><h3>Garantía de cambio de programa</h3><p>Si el primer módulo no te sirve, te cambiamos de curso o ajustamos tu plan. Sin complicaciones. Entrenar con nosotros no es un riesgo.</p></div>
+    <div class="faq" data-reveal>
+      <details><summary>¿Necesito equipamiento en casa?</summary><p>Acceso a un gimnasio o equipo básico, según la zona. Donde hace falta, dejamos una variante para la casa.</p></details>
+      <details><summary>¿Puedo pausar si viajo?</summary><p>Sí. El acceso al curso es por 12 meses, avanzas a tu ritmo. En planes mensuales, nos avisas por WhatsApp.</p></details>
+      <details><summary>¿Y si no tengo gimnasio cerca?</summary><p>Los cursos online están pensados para eso: entrenas desde donde estés con la técnica en video.</p></details>
+      <details><summary>¿Cómo se paga?</summary><p>Con Mercado Pago: tarjeta, débito o transferencia. No guardamos los datos de tu tarjeta.</p></details>
+      <details><summary>¿Cómo entro a la app?</summary><p>Creas tu cuenta en app.solfitonline.com con el mismo correo del pago y tu plan aparece activo.</p></details>
     </div>
-    <div class="faq">
-      <details><summary>¿Necesito equipamiento en casa?</summary><p>Para los cursos online necesitas acceso a un gimnasio o equipo básico, según la zona que entrenes. Donde hace falta, dejamos una variante para hacerlo en casa. <span class="todo">[SOL: confirmar variantes]</span></p></details>
-      <details><summary>¿Puedo pausar si me voy de viaje?</summary><p>Sí. Como el acceso a cada curso es por 12 meses, avanzas a tu ritmo y retomas cuando vuelvas. En los planes mensuales, nos avisas y vemos tu caso por WhatsApp.</p></details>
-      <details><summary>¿Qué pasa si no tengo gimnasio cerca?</summary><p>Los cursos online están pensados justo para eso: entrenas desde donde estés siguiendo el plan en la app, con la técnica en video.</p></details>
-      <details><summary>¿Cómo se paga y es seguro?</summary><p>El pago es con Mercado Pago, con tarjeta de crédito, débito o saldo. Solfit no almacena los datos de tu tarjeta. Si pagaste con otro correo, nos escribes por WhatsApp y vinculamos tu cuenta.</p></details>
-      <details><summary>¿Cómo entro a la app?</summary><p>Creas tu cuenta en app.solfitonline.com con el mismo correo que usaste al pagar, y tu curso o plan aparece activado.</p></details>
-    </div>
-    <div class="cta-row"><a class="btn btn-sun" href="#cursos">Ver los cursos</a><a class="btn btn-ghost" href="#presencial">Ver planes del gimnasio</a></div>
   </div>
 </section>
 
-<div class="final">
-  <img src="ropes.jpg" alt="" aria-hidden="true" loading="lazy">
-  <div class="wrap">
-    <h2>Tu próxima sesión<br>con un <span class="sun">plan real</span> detrás.</h2>
-    <p>Mira el video, elige tus cursos o tu plan y empieza a entrenar con un sistema que te acompaña dentro y fuera del gimnasio.</p>
-    <a class="btn btn-sun" href="#cursos">Ver los cursos</a>
+<!-- CTA FINAL -->
+<section class="section final">
+  <img src="gym-treadmill.jpg" alt="" aria-hidden="true" loading="lazy">
+  <div class="container">
+    <h2>Tu próxima sesión con <span class="ac">plan real</span></h2>
+    <p class="lead">Elige tu curso o plan y empieza a entrenar con método.</p>
+    <a class="btn btn--primary" href="#cursos">Quiero mi plan</a>
   </div>
-</div>
+</section>
 
+<!-- FOOTER -->
 <footer>
-  <div class="wrap">
-    <div class="foot">
-      <div>
-        <svg class="emblem" viewBox="0 0 120 94" fill="none" aria-hidden="true" style="height:52px;margin-bottom:12px;">
-          <line x1="8" y1="62" x2="112" y2="62" stroke="var(--bone)" stroke-width="6" stroke-linecap="round"/>
-          <rect x="12" y="46" width="5" height="32" rx="1.5" fill="var(--bone)"/><rect x="20" y="50" width="4" height="24" rx="1.5" fill="var(--bone)"/><rect x="26" y="54" width="3.5" height="16" rx="1.5" fill="var(--bone)"/>
-          <rect x="103" y="46" width="5" height="32" rx="1.5" fill="var(--bone)"/><rect x="96" y="50" width="4" height="24" rx="1.5" fill="var(--bone)"/><rect x="90.5" y="54" width="3.5" height="16" rx="1.5" fill="var(--bone)"/>
-          <g stroke="var(--sun)" stroke-width="3" stroke-linecap="round">
-            <line x1="82.6" y1="53.8" x2="94.8" y2="49.4"/><line x1="78.4" y1="46.6" x2="88.3" y2="38.2"/><line x1="72" y1="41.2" x2="78.5" y2="30"/><line x1="64.2" y1="38.4" x2="66.4" y2="25.6"/><line x1="60" y1="38" x2="60" y2="25"/><line x1="55.8" y1="38.4" x2="53.6" y2="25.6"/><line x1="48" y1="41.2" x2="41.5" y2="30"/><line x1="41.6" y1="46.6" x2="31.7" y2="38.2"/><line x1="37.4" y1="53.8" x2="25.2" y2="49.4"/>
-          </g>
-          <path d="M44 61 a16 16 0 0 1 32 0 Z" fill="var(--sun)"/>
-          <polyline points="36,84 45,73 53,81 60,71 68,81 76,73 84,84" fill="none" stroke="var(--sage)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <h4>Solfit Gimnasio</h4>
-        <p>Entrenamiento con método en Las Trancas, Pinto, Ñuble. Presencial, online y cursos, todo en una app.</p>
-        <p style="margin-top:10px;"><a href="#wa" onclick="waLink(event,'Hola, quiero más información de Solfit')">WhatsApp <span class="todo">[SOL: número]</span></a><br>
-        <a href="https://instagram.com/solfitgym" target="_blank" rel="noopener">Instagram @solfitgym</a></p>
-      </div>
-      <div><h4>Legal</h4><div class="links"><a href="#" onclick="return false;">Privacidad</a><a href="#" onclick="return false;">Términos y condiciones</a><a href="#" onclick="return false;">Devoluciones</a><a href="#" onclick="return false;">Borrar cuenta</a></div></div>
+  <div class="container foot">
+    <div>
+      <svg viewBox="0 0 120 94" fill="none" aria-hidden="true" style="height:48px;color:var(--c-text);margin-bottom:12px">
+        <line x1="8" y1="62" x2="112" y2="62" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><rect x="12" y="46" width="5" height="32" rx="1.5" fill="currentColor"/><rect x="20" y="50" width="4" height="24" rx="1.5" fill="currentColor"/><rect x="26" y="54" width="3.5" height="16" rx="1.5" fill="currentColor"/><rect x="103" y="46" width="5" height="32" rx="1.5" fill="currentColor"/><rect x="96" y="50" width="4" height="24" rx="1.5" fill="currentColor"/><rect x="90.5" y="54" width="3.5" height="16" rx="1.5" fill="currentColor"/><g stroke="#F9930B" stroke-width="3" stroke-linecap="round"><line x1="82.6" y1="53.8" x2="94.8" y2="49.4"/><line x1="78.4" y1="46.6" x2="88.3" y2="38.2"/><line x1="72" y1="41.2" x2="78.5" y2="30"/><line x1="64.2" y1="38.4" x2="66.4" y2="25.6"/><line x1="60" y1="38" x2="60" y2="25"/><line x1="55.8" y1="38.4" x2="53.6" y2="25.6"/><line x1="48" y1="41.2" x2="41.5" y2="30"/><line x1="41.6" y1="46.6" x2="31.7" y2="38.2"/><line x1="37.4" y1="53.8" x2="25.2" y2="49.4"/></g><path d="M44 61 a16 16 0 0 1 32 0 Z" fill="#F9930B"/><polyline points="36,84 45,73 53,81 60,71 68,81 76,73 84,84" fill="none" stroke="#759B72" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h4>Solfit Gym</h4>
+      <p>Entrenamiento con método en Las Trancas, Pinto, Ñuble.</p>
+      <p style="margin-top:8px"><a href="#" onclick="return wa('Hola, quiero información de Solfit')">WhatsApp<!-- TODO: número real --></a> · <a href="https://instagram.com/solfitgym" target="_blank" rel="noopener">Instagram @solfitgym</a></p>
     </div>
-    <div class="foot-base"><span>© 2026 Solfit Gimnasio · Las Trancas, Pinto, Ñuble</span><span>Fotos de referencia: Unsplash (uso libre)</span></div>
+    <div><h4>Legal</h4><div class="lk"><a href="#" onclick="return false">Privacidad</a><a href="#" onclick="return false">Términos</a><a href="#" onclick="return false">Devoluciones</a><a href="#" onclick="return false">Borrar cuenta</a></div></div>
   </div>
+  <div class="container footbase"><span>© 2026 Solfit Salud Integral SpA · Las Trancas, Ñuble</span><span>Fotos: Solfit Gym</span></div>
 </footer>
 
-<a class="wafloat" id="wa" href="#" onclick="waLink(event,'Hola, quiero información de Solfit')" aria-label="Escribir por WhatsApp">
-  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.01c-.24.68-1.42 1.3-1.95 1.34-.5.04-1.14.21-3.69-.77-3.1-1.22-5.08-4.38-5.24-4.58-.15-.2-1.26-1.67-1.26-3.19 0-1.52.8-2.27 1.08-2.58.28-.31.61-.38.81-.38.2 0 .41 0 .58.01.19.01.44-.07.69.53.24.6.83 2.07.9 2.22.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.39-.45.53-.15.15-.3.31-.13.6.17.3.76 1.25 1.63 2.02 1.12 1 2.07 1.31 2.36 1.46.3.15.47.12.64-.07.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.71.81 2.01.96.3.15.5.22.57.34.07.12.07.72-.17 1.4z"/></svg>
-</a>
+<!-- WhatsApp + barra fija -->
+<a class="wa" href="#" onclick="return wa('Hola, quiero información de Solfit')" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.01c-.24.68-1.42 1.3-1.95 1.34-.5.04-1.14.21-3.69-.77-3.1-1.22-5.08-4.38-5.24-4.58-.15-.2-1.26-1.67-1.26-3.19 0-1.52.8-2.27 1.08-2.58.28-.31.61-.38.81-.38.2 0 .41 0 .58.01.19.01.44-.07.69.53.24.6.83 2.07.9 2.22.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.39-.45.53-.15.15-.3.31-.13.6.17.3.76 1.25 1.63 2.02 1.12 1 2.07 1.31 2.36 1.46.3.15.47.12.64-.07.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.71.81 2.01.96.3.15.5.22.57.34.07.12.07.72-.17 1.4z"/></svg></a>
+<div class="mbar" id="mbar">
+  <div class="pr">Desde $19.990<small>por mes</small></div>
+  <a class="btn btn--primary" href="#cursos">Quiero mi plan</a>
+</div>
 
-<div class="scrim" id="scrim" onclick="closeCheckout()"></div>
+<!-- checkout -->
+<div class="scrim" id="scrim" onclick="closeBuy()"></div>
 <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Resumen de compra">
-  <header><h3>Tu compra</h3><button class="xbtn" onclick="closeCheckout()" aria-label="Cerrar">×</button></header>
-  <div class="inner">
-    <div class="summary">
-      <span class="kind" id="sKind">Plan mensual</span>
-      <div class="name" id="sName">Open Gym</div>
-      <div class="line"><span>Incluye</span><b>Cuenta en la app</b></div>
-      <div class="line total"><span>Total a pagar</span><b class="num" id="sTotal">$38.000</b></div>
-    </div>
-    <div class="mp"><span class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 0 1 16 0c0 3-2 5-4 5s-3-1.5-3-3 .5-3 2-3"/></svg></span><div class="t"><b>Pago con Mercado Pago</b>Tarjeta, débito o saldo. Pago seguro.</div></div>
-    <div class="field"><label for="fName">Nombre</label><input id="fName" type="text" placeholder="Tu nombre y apellido" autocomplete="name"></div>
-    <div class="field"><label for="fMail">Correo (el mismo para entrar a la app)</label><input id="fMail" type="email" placeholder="tu@correo.cl" autocomplete="email"></div>
-    <button class="btn btn-sun" onclick="pay()">Ir a pagar con Mercado Pago</button>
-    <p class="fine">Al continuar aceptas los términos de uso de Solfit. El cobro se procesa en Mercado Pago; Solfit no guarda los datos de tu tarjeta. Los planes mensuales se renuevan al final de cada periodo y puedes cancelarlos desde la app.</p>
+  <header><h3>Tu compra</h3><button class="xb" onclick="closeBuy()" aria-label="Cerrar">✕</button></header>
+  <div class="in">
+    <div class="sum"><span class="k" id="sK">Curso</span><div class="nm" id="sN">Curso</div><div class="ln"><span>Incluye</span><b>Cuenta en la app</b></div><div class="ln tot"><span>Total</span><b class="num" id="sT">Por confirmar</b></div></div>
+    <div class="mp"><span class="d"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 0 1 16 0c0 3-2 5-4 5s-3-1.5-3-3 .5-3 2-3"/></svg></span><div><b>Mercado Pago</b><span>Tarjeta, débito o transferencia.</span></div></div>
+    <div class="fld"><label for="fN">Nombre</label><input id="fN" type="text" placeholder="Tu nombre" autocomplete="name"></div>
+    <div class="fld"><label for="fM">Correo (el mismo para la app)</label><input id="fM" type="email" placeholder="tu@correo.cl" autocomplete="email"></div>
+    <button class="btn btn--primary" onclick="pay()">Ir a pagar</button>
+    <p class="fine">El cobro se procesa en Mercado Pago. No guardamos los datos de tu tarjeta.</p>
   </div>
 </aside>
 <div class="toast" id="toast" role="status"></div>
 
-<div class="cookies" id="cookies" role="dialog" aria-label="Aviso de cookies">
-  <div class="wrap">
-    <p>Usamos cookies de medición y publicidad (píxel de Meta) solo si las aceptas.</p>
-    <button class="btn btn-sun" id="ckYes">Aceptar</button>
-    <button class="btn btn-ghost" id="ckNo">Rechazar</button>
-  </div>
+<!-- cookies -->
+<div class="ck" id="ck" role="dialog" aria-label="Cookies">
+  <div class="container"><p>Usamos cookies de medición y publicidad (píxel de Meta) solo si las aceptas.</p><button class="btn btn--primary" id="ckY">Aceptar</button><button class="btn btn--ghost" id="ckN">Rechazar</button></div>
 </div>
 
 <script>
-  var WA = '56900000000';
-  function waLink(ev, text){ ev.preventDefault(); window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(text), '_blank', 'noopener'); }
-  function toggleMenu(){ var m=document.getElementById('mobilemenu'), t=document.getElementById('navtoggle'); var o=m.classList.toggle('open'); t.classList.toggle('on',o); t.setAttribute('aria-expanded',o); }
-  function closeMenu(){ var m=document.getElementById('mobilemenu'), t=document.getElementById('navtoggle'); m.classList.remove('open'); t.classList.remove('on'); t.setAttribute('aria-expanded','false'); }
-  function openCheckout(name, total, kind){
-    document.getElementById('sName').textContent = name;
-    document.getElementById('sTotal').textContent = total;
-    document.getElementById('sKind').textContent = kind || 'Plan';
-    document.getElementById('drawer').classList.add('open');
-    document.getElementById('drawer').setAttribute('aria-hidden','false');
-    document.getElementById('scrim').classList.add('open');
-    document.body.style.overflow = 'hidden';
-    setTimeout(function(){ document.getElementById('fName').focus(); }, 320);
+  var WA='56900000000'; // TODO: número real
+  function wa(t){ window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(t),'_blank','noopener'); return false; }
+  function toast(m,t){ var e=document.getElementById('toast'); e.textContent=m; e.classList.remove('ok','err'); if(t)e.classList.add(t); e.classList.add('show'); clearTimeout(e._h); e._h=setTimeout(function(){e.classList.remove('show');},5000); }
+
+  // menú
+  var menu=document.getElementById('menu'), burger=document.getElementById('burger');
+  function openMenu(){ menu.classList.add('open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+  function closeMenu(){ menu.classList.remove('open'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+  burger.onclick=openMenu; document.getElementById('ovclose').onclick=closeMenu;
+  menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',closeMenu); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeMenu(); closeBuy(); } });
+
+  // header ocultar/mostrar
+  var hdr=document.getElementById('hdr'), lastY=0;
+  addEventListener('scroll',function(){ var y=scrollY; if(y>lastY&&y>400) hdr.classList.add('hide'); else hdr.classList.remove('hide'); lastY=y; },{passive:true});
+
+  // reveal
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } }); },{threshold:.15,rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('[data-reveal]').forEach(function(el){ io.observe(el); });
   }
-  function closeCheckout(){
-    document.getElementById('drawer').classList.remove('open');
-    document.getElementById('drawer').setAttribute('aria-hidden','true');
-    document.getElementById('scrim').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  function toast(msg, type){ var t = document.getElementById('toast'); t.textContent = msg; t.classList.remove('ok','err'); if(type) t.classList.add(type); t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(function(){ t.classList.remove('show'); }, 5200); }
-  function pay(){
-    var name = document.getElementById('fName').value.trim();
-    var mail = document.getElementById('fMail').value.trim();
-    if(!name){ toast('Escribe tu nombre para continuar.','err'); document.getElementById('fName').focus(); return; }
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){ toast('Revisa tu correo: lo usarás para entrar a la app.','err'); document.getElementById('fMail').focus(); return; }
-    toast('Listo. Te llevamos a Mercado Pago y te escribimos a ' + mail + ' para activar tu compra.','ok');
-  }
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeCheckout(); });
+
+  // contadores
   (function(){
-    function run(el){ var target=parseFloat(el.getAttribute('data-count'))||0, suf=el.getAttribute('data-suffix')||'', pre=el.getAttribute('data-prefix')||'', dur=1200, start=null;
-      function fmt(n){ return pre + Math.round(n).toLocaleString('es-CL') + suf; }
-      function step(ts){ if(!start)start=ts; var p=Math.min((ts-start)/dur,1); el.textContent=fmt(target*p); if(p<1)requestAnimationFrame(step); }
+    function run(el){ var n=parseFloat(el.getAttribute('data-count'))||0, s=el.getAttribute('data-suffix')||'', p=el.getAttribute('data-prefix')||'', d=1200, st=null;
+      function step(ts){ if(!st)st=ts; var k=Math.min((ts-st)/d,1); el.textContent=p+Math.round(n*k).toLocaleString('es-CL')+s; if(k<1)requestAnimationFrame(step); }
       requestAnimationFrame(step); }
-    var nums=document.querySelectorAll('[data-count]');
-    if(!('IntersectionObserver' in window)||!nums.length) return;
-    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ run(e.target); io.unobserve(e.target); } }); },{threshold:.5});
-    nums.forEach(function(n){ io.observe(n); });
+    var ns=document.querySelectorAll('[data-count]');
+    if('IntersectionObserver' in window && ns.length){ var o=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ run(e.target); o.unobserve(e.target); } }); },{threshold:.5}); ns.forEach(function(n){ o.observe(n); }); }
   })();
-  (function(){
-    var KEY='solfit_cookies', PIXEL_ID='';
-    function loadPixel(){
-      if(window.fbq || !PIXEL_ID) return;
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', PIXEL_ID); fbq('track','PageView');
-    }
-    var box=document.getElementById('cookies'), v=null;
-    try{ v=localStorage.getItem(KEY); }catch(e){}
-    if(v==='yes'){ loadPixel(); } else if(v!=='no'){ box.classList.add('show'); }
-    function set(x){ try{ localStorage.setItem(KEY,x); }catch(e){} box.classList.remove('show'); if(x==='yes') loadPixel(); }
-    document.getElementById('ckYes').onclick=function(){ set('yes'); };
-    document.getElementById('ckNo').onclick=function(){ set('no'); };
+
+  // barra fija mobile: mostrar tras hero, ocultar en footer
+  var mbar=document.getElementById('mbar'), hero=document.getElementById('top'), foot=document.querySelector('footer');
+  if('IntersectionObserver' in window){
+    var heroOut=false, footIn=false;
+    function upd(){ mbar.classList.toggle('show', heroOut && !footIn); }
+    new IntersectionObserver(function(e){ heroOut=!e[0].isIntersecting; upd(); },{threshold:.2}).observe(hero);
+    new IntersectionObserver(function(e){ footIn=e[0].isIntersecting; upd(); }).observe(foot);
+  }
+
+  // checkout
+  function buy(name,total,kind){ document.getElementById('sN').textContent=name; document.getElementById('sT').textContent=total||'Por confirmar'; document.getElementById('sK').textContent=kind||'Curso online · pago único'; document.getElementById('drawer').classList.add('open'); document.getElementById('drawer').setAttribute('aria-hidden','false'); document.getElementById('scrim').classList.add('open'); document.body.style.overflow='hidden'; setTimeout(function(){document.getElementById('fN').focus();},300); }
+  function closeBuy(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('drawer').setAttribute('aria-hidden','true'); document.getElementById('scrim').classList.remove('open'); document.body.style.overflow=''; }
+  function pay(){ var n=document.getElementById('fN').value.trim(), m=document.getElementById('fM').value.trim();
+    if(!n){ toast('Escribe tu nombre.','err'); return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){ toast('Revisa tu correo.','err'); return; }
+    toast('Listo. Te llevamos a Mercado Pago y te escribimos a '+m+'.','ok'); } // TODO: integrar Mercado Pago
+
+  // cookies + píxel
+  (function(){ var K='solfit_ck', P=''; /* TODO: ID píxel Meta */
+    function px(){ if(window.fbq||!P)return; !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init',P); fbq('track','PageView'); }
+    var box=document.getElementById('ck'), v=null; try{v=localStorage.getItem(K);}catch(e){}
+    if(v==='yes')px(); else if(v!=='no')box.classList.add('show');
+    function set(x){ try{localStorage.setItem(K,x);}catch(e){} box.classList.remove('show'); if(x==='yes')px(); }
+    document.getElementById('ckY').onclick=function(){set('yes');}; document.getElementById('ckN').onclick=function(){set('no');};
   })();
 </script>
